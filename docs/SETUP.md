@@ -17,15 +17,25 @@ published number or run one instance on your laptop.
 ## 0 · Reproduce a published number without any infrastructure — 20 min, $0
 
 - **Need:** Python 3.12, `uv`, Docker.
-- Download a run's `preds.jsonl` from the site's Downloads page.
+- Pick a run on the site's Downloads page (or in `published-runs/README.md` here). Its
+  predictions file is committed in this repository as `published-runs/<run_id>/preds.jsonl`; the
+  full artifacts (patches, trajectories, per-call ledgers, the official harness's eval reports and
+  test logs, every judge pass) are one `bundle-<run_id>.tar.gz` on the `v1.0-data` release, with
+  `SHA256SUMS` beside them.
 - Run the official harness against the pinned dataset revision:
   ```bash
+  uv sync --locked
   uv run python -m swebench.harness.run_evaluation \
     --dataset_name SWE-bench/SWE-bench_Verified --split test \
-    --predictions_path preds.jsonl --run_id verify --max_workers 4
+    --predictions_path published-runs/<run_id>/preds.jsonl --run_id verify --max_workers 4
   ```
-- **Verify:** the resolve count matches the run's results page. The images are pulled from
-  Docker Hub by the harness; a Docker Hub login avoids the anonymous rate limit.
+  From a downloaded bundle instead: `sha256sum -c SHA256SUMS --ignore-missing`, `tar xzf` it, and
+  point `--predictions_path` at `<run_id>/preds.jsonl`; the bundle's `README.md` states the
+  expected resolve count and its `eval/<instance>/1/eval_report.json` files are what this command
+  produced here, so any instance that differs can be diffed.
+- **Verify:** the resolve count matches the run's results page (`published-runs/README.md` lists
+  them). The images are pulled from Docker Hub by the harness, ~1 GB each; a Docker Hub login
+  avoids the anonymous rate limit. A 78-instance run is ~20 min after the pulls, a 500-run longer.
 
 ## 1 · Laptop tooling — 30 min, $0
 
