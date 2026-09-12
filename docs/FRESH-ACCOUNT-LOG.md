@@ -41,7 +41,7 @@ development history; the validated tree is this repository's initial commit, tag
 |---|---|
 | wall-clock, first attempt | 17:20Z → 21:23Z ≈ 4 h wall-clock, of which ≈ 1 h 20 was fixing the 21 deviations; bring-up to first graded run ≈ 2 h 15 (17:20Z → 19:34Z launch, 19:54Z graded) |
 | wall-clock, repeat (the clean pass, restart 5) | **72 min from an empty account to run-ready**; 2 h 51 min for the whole of steps 1–13 including two runs, a judge and the return to empty, of which about 50 min was operator time between steps |
-| dollars (Cost Explorer, next day) | _pending_; API-side spend on the clean pass: run 1 $0.55, run 2 $0.56, judge $0.04, discovery ≈ $24 (a `target_concurrency=20` ramp — set the ceiling by hand or pass a small target for a 10-instance adoption). The first pass: run $0.56, judge $0.04, discovery $24 |
+| dollars (Cost Explorer, next day) | $3.05 for 2026-09-12, the clean-pass day (ECS $1.13, RDS $0.55, EC2 + EBS $0.99, ELB $0.19, VPC $0.15; Cost Explorer was enabled after the pass, earlier days still being prepared); API-side spend on the clean pass: run 1 $0.55, run 2 $0.56, judge $0.04, discovery ≈ $24 (a `target_concurrency=20` ramp — set the ceiling by hand or pass a small target for a 10-instance adoption). The first pass: run $0.56, judge $0.04, discovery $24 |
 | hand interventions on the first attempt | one: releasing four drained Spot hosts from their termination hook (deviation 17). Everything else was fixed in the tool and re-run through the tool |
 | hand interventions on the repeat | **none** (restart 5); restarts 1–4 each stopped at a deviation that became a fix |
 
