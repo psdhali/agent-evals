@@ -1,0 +1,25 @@
+.git
+.venv
+__pycache__
+*.pyc
+.eggs
+*.egg-info
+.pytest_cache
+.mypy_cache
+.ruff_cache
+node_modules
+dist
+logs
+.env
+.env.*
+infra/terraform/.terraform
+infra/terraform/**/.terraform
+infra/terraform/**/*.tfstate*
+# E-3 (DoD 10 review): terraform.tfvars holds the real secrets (Aurora
+# password, OpenRouter key, LiteLLM key) — it was the one sensitive file the
+# exclusion list missed. Keep the .example so docs builds still work.
+infra/terraform/**/*.tfvars
+!**/*.tfvars.example
+design
+tests
+scripts/smoke_test*.py

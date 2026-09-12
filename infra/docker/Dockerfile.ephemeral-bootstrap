@@ -1,0 +1,15 @@
+# syntax=docker/dockerfile:1
+# Bottlerocket BOOTSTRAP container: on boot, mount the instance-store NVMe and
+# bind it over the host's /var/lib/docker so the runtime's data-root (images,
+# build cache) lives on the NVMe instead of the small EBS — the thing that
+# filled and blocked the warm-job image builds (disk-gate ~18 GB free on the
+# 20 GB EBS while the 75 GB NVMe sat unused).
+#
+# Run as `mode = "once"`, `essential = false` in [settings.bootstrap-containers]
+# in the eval ASG launch-template user_data. Idempotent: only mkfs when blank,
+# only mount when not already mounted (instance-store survives reboot).
+FROM alpine:3.19
+RUN apk add --no-cache xfsprogs util-linux
+COPY ephemeral-bootstrap.sh /usr/local/bin/ephemeral-bootstrap.sh
+RUN chmod +x /usr/local/bin/ephemeral-bootstrap.sh
+ENTRYPOINT ["/usr/local/bin/ephemeral-bootstrap.sh"]

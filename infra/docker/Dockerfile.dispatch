@@ -1,0 +1,51 @@
+# syntax=docker/dockerfile:1
+# Dispatch Lambda container image (ADR-0024): the S3-dropped run config calls
+# the SAME dispatch_run() the Phase-7 POST /runs endpoint will call.
+#
+# This is a container-imaged Lambda. The function runs attached to the VPC
+# (private subnets + task SG) so `database.connection` reaches Aurora directly
+# with the existing psycopg path — no Data API, no rewrites.
+#
+# Use the official AWS Lambda Python base (public.ecr.aws/lambda/python) which
+# is the supported way to run container lambdas: it carries the Runtime
+# Interface Client and the CMD ["module.handler"] contract. A home-made
+# `python /app/run_handler.py` image would have to reimplement the Runtime API —
+# that is exactly the 'looks right, wrong at runtime' shape this project keeps
+# failing on. Build linux/amd64 (the default Lambda architecture for this
+# failing).
+FROM public.ecr.aws/lambda/python:3.12
+
+# uv for locked dependency management (ADR-0017).
+COPY --from=ghcr.io/astral-sh/uv:0.5 /uv /uvx /bin/
+
+WORKDIR ${LAMBDA_TASK_ROOT}
+
+# Locked deps + the app. uv sync has no --system; it builds a .venv, and the
+# Lambda runtime python is launched by the RIC with PYTHONPATH honored — so
+# point PYTHONPATH at the venv's site-packages and the handler imports resolve
+# the same way they would from the workers' uv installs.
+COPY pyproject.toml uv.lock ./
+COPY swebench_eval ./swebench_eval
+RUN uv sync --frozen --no-dev
+ENV PYTHONPATH="/var/task/.venv/lib/python3.12/site-packages"
+
+# The handler is a module the Lambda runtime imports by name.
+CMD ["swebench_eval.orchestrator.s3_dispatch.handler"]
+
+# PA-9 provenance — the dispatch Lambda is the register-time path that writes
+# config_snapshot. Without the bake, framework_sha/gateway_config_hash resolve
+# to None in here (no .git, no repo infra/), which is exactly what the 5a-ii
+# DoD-6 read-back showed. docker_build_push.sh already passes these build-args
+# to every image; this Dockerfile must declare them or they are silently
+# discarded. Same ARG/ENV block as the other five images.
+ARG FRAMEWORK_SHA=unknown
+ARG GATEWAY_CONFIG_HASH=unknown
+ENV FRAMEWORK_SHA=$FRAMEWORK_SHA \
+    GATEWAY_CONFIG_HASH=$GATEWAY_CONFIG_HASH
+
+# resolved_models: dispatcher._resolve_model_aliases() reads
+# infra/docker/litellm_config.yaml from parents[3] of dispatcher.py — i.e.
+# /var/task/infra/docker/litellm_config.yaml in this image. Without it the
+# snapshot's resolved_models comes back {} and the run record never says which
+# model produced the patch (the M-1 question can't be settled from data).
+COPY infra/docker/litellm_config.yaml /var/task/infra/docker/litellm_config.yaml

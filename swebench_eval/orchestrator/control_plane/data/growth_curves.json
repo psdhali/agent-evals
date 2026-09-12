@@ -1,0 +1,264 @@
+{
+  "fitted_at": "2026-09-03T20:12:15Z",
+  "n_calls": 5511,
+  "prompt_field": "input_tokens + cached_tokens when cached > input (Anthropic), else input",
+  "groups": {
+    "cheap-oss-model|claude_code": {
+      "a": 7973.5,
+      "b": -35.65,
+      "n": 266,
+      "insufficient": false,
+      "latency_intercept_s": 10.254,
+      "latency_per_output_token_s": 0.010829,
+      "median_output_tokens": 0.0,
+      "latency_s": 10.254,
+      "turn_period_s": 7.84,
+      "n_gaps": 261,
+      "median_tool_time_s": 0.0,
+      "survival": {
+        "0": 0.4
+      },
+      "survival_attempts": {
+        "0": 5
+      }
+    },
+    "cheap-oss-model|codex": {
+      "a": 13599.0,
+      "b": 386.237,
+      "n": 156,
+      "insufficient": false,
+      "latency_intercept_s": 3.686,
+      "latency_per_output_token_s": 0.01079,
+      "median_output_tokens": 80.0,
+      "latency_s": 4.549,
+      "turn_period_s": 4.36,
+      "n_gaps": 152,
+      "median_tool_time_s": 0.0,
+      "survival": {},
+      "survival_attempts": {}
+    },
+    "cheap-oss-model|custom_minimal": {
+      "a": 4639.4,
+      "b": 1026.183,
+      "n": 175,
+      "insufficient": false,
+      "latency_intercept_s": 3.164,
+      "latency_per_output_token_s": 0.007171,
+      "median_output_tokens": 170.0,
+      "latency_s": 4.383,
+      "turn_period_s": 5.1,
+      "n_gaps": 167,
+      "median_tool_time_s": 0.72,
+      "survival": {
+        "0": 0.5
+      },
+      "survival_attempts": {
+        "0": 8
+      }
+    },
+    "cheap-oss-model|mini_swe_agent": {
+      "a": 4419.0,
+      "b": 1088.531,
+      "n": 564,
+      "insufficient": false,
+      "latency_intercept_s": 3.909,
+      "latency_per_output_token_s": 0.008217,
+      "median_output_tokens": 257.5,
+      "latency_s": 6.025,
+      "turn_period_s": 7.5,
+      "n_gaps": 559,
+      "median_tool_time_s": 1.47,
+      "survival": {
+        "0": 1.0
+      },
+      "survival_attempts": {
+        "0": 5
+      }
+    },
+    "cheap-oss-model|opencode": {
+      "a": 15003.3,
+      "b": 996.907,
+      "n": 66,
+      "insufficient": false,
+      "latency_intercept_s": 0.463,
+      "latency_per_output_token_s": 0.020162,
+      "median_output_tokens": 235.5,
+      "latency_s": 5.211,
+      "turn_period_s": 7.58,
+      "n_gaps": 65,
+      "median_tool_time_s": 2.37,
+      "survival": {},
+      "survival_attempts": {}
+    },
+    "claude-code-model|claude_code": {
+      "a": 11457.0,
+      "b": -208.477,
+      "n": 74,
+      "insufficient": false,
+      "latency_intercept_s": 4.352,
+      "latency_per_output_token_s": 0.006014,
+      "median_output_tokens": 162.0,
+      "latency_s": 5.327,
+      "turn_period_s": 6.69,
+      "n_gaps": 69,
+      "median_tool_time_s": 1.36,
+      "survival": {
+        "0": 0.2
+      },
+      "survival_attempts": {
+        "0": 5
+      }
+    },
+    "laguna-xs-2.1-claude|claude_code": {
+      "a": 31012.2,
+      "b": 82.021,
+      "n": 188,
+      "insufficient": false,
+      "latency_intercept_s": 0.624,
+      "latency_per_output_token_s": 0.005668,
+      "median_output_tokens": 112.0,
+      "latency_s": 1.259,
+      "turn_period_s": 1.92,
+      "n_gaps": 186,
+      "median_tool_time_s": 0.66,
+      "survival": {},
+      "survival_attempts": {}
+    },
+    "laguna-xs-2.1|claude_code": {
+      "a": 34387.5,
+      "b": 719.041,
+      "n": 696,
+      "insufficient": false,
+      "latency_intercept_s": 0.799,
+      "latency_per_output_token_s": 0.006186,
+      "median_output_tokens": 150.0,
+      "latency_s": 1.727,
+      "turn_period_s": 3.73,
+      "n_gaps": 688,
+      "median_tool_time_s": 2.0,
+      "survival": {
+        "0": 1.0,
+        "40": 0.714,
+        "80": 0.4
+      },
+      "survival_attempts": {
+        "0": 8,
+        "40": 7,
+        "80": 5
+      }
+    },
+    "laguna-xs-2.1|codex": {
+      "a": 29114.8,
+      "b": 271.089,
+      "n": 1131,
+      "insufficient": false,
+      "latency_intercept_s": 0.784,
+      "latency_per_output_token_s": 0.006216,
+      "median_output_tokens": 73.0,
+      "latency_s": 1.238,
+      "turn_period_s": 6.1,
+      "n_gaps": 1123,
+      "median_tool_time_s": 4.87,
+      "survival": {
+        "0": 1.0,
+        "40": 0.875
+      },
+      "survival_attempts": {
+        "0": 8,
+        "40": 8
+      }
+    },
+    "laguna-xs-2.1|custom_minimal": {
+      "a": 21314.3,
+      "b": 933.855,
+      "n": 641,
+      "insufficient": false,
+      "latency_intercept_s": 0.711,
+      "latency_per_output_token_s": 0.006045,
+      "median_output_tokens": 255.0,
+      "latency_s": 2.252,
+      "turn_period_s": 7.68,
+      "n_gaps": 633,
+      "median_tool_time_s": 5.43,
+      "survival": {
+        "0": 0.875,
+        "40": 0.667
+      },
+      "survival_attempts": {
+        "0": 8,
+        "40": 6
+      }
+    },
+    "laguna-xs-2.1|mini_swe_agent": {
+      "a": 3608.5,
+      "b": 849.7,
+      "n": 925,
+      "insufficient": false,
+      "latency_intercept_s": 0.728,
+      "latency_per_output_token_s": 0.005838,
+      "median_output_tokens": 123.0,
+      "latency_s": 1.446,
+      "turn_period_s": 6.01,
+      "n_gaps": 917,
+      "median_tool_time_s": 4.56,
+      "survival": {
+        "0": 1.0,
+        "40": 1.0,
+        "80": 0.8
+      },
+      "survival_attempts": {
+        "0": 8,
+        "40": 8,
+        "80": 5
+      }
+    },
+    "laguna-xs-2.1|opencode": {
+      "a": 17784.1,
+      "b": 615.972,
+      "n": 629,
+      "insufficient": false,
+      "latency_intercept_s": 0.577,
+      "latency_per_output_token_s": 0.006309,
+      "median_output_tokens": 185.0,
+      "latency_s": 1.744,
+      "turn_period_s": 4.54,
+      "n_gaps": 621,
+      "median_tool_time_s": 2.79,
+      "survival": {
+        "0": 1.0,
+        "40": 1.0
+      },
+      "survival_attempts": {
+        "0": 8,
+        "40": 5
+      }
+    }
+  },
+  "pooled": {
+    "a": 25948.4,
+    "b": 481.533,
+    "n": 5511,
+    "insufficient": false,
+    "latency_intercept_s": 1.07,
+    "latency_per_output_token_s": 0.008824,
+    "median_output_tokens": 132.0,
+    "latency_s": 2.234,
+    "turn_period_s": 5.81,
+    "n_gaps": 5441,
+    "median_tool_time_s": 3.57,
+    "survival": {
+      "0": 0.814,
+      "40": 0.812,
+      "80": 0.75,
+      "120": 0.647,
+      "160": 0.667
+    },
+    "survival_attempts": {
+      "0": 70,
+      "40": 48,
+      "80": 28,
+      "120": 17,
+      "160": 9
+    }
+  }
+}

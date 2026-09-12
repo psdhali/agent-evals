@@ -1,0 +1,6 @@
+# Copy to backend.hcl (gitignored) — or let `make bootstrap` write it — and run
+#   terraform init -backend-config=backend.hcl
+# The same bucket goes into terraform.tfvars as tfstate_bucket.
+bucket  = "<your-tfstate-bucket>"
+region  = "us-west-2"
+profile = "eval-framework"   # delete this line to use the ambient credential chain

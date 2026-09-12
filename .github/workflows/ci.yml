@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - name: Install dependencies
+        run: uv sync --locked
+      - name: Lint
+        run: |
+          uv run ruff check .
+          uv run black --check .
+          uv run mypy swebench_eval/ scripts/ tests/
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - name: Install dependencies
+        run: uv sync --locked
+      - name: Run tests
+        run: uv run pytest
+
+  # Terraform infra check (review M-8): the Phase 4 gap was a check that skipped
+  # the files that broke. Terraform code has no automated check; add fmt + per-env
+  # validate now, while there are 15 modules rather than 40. `validate` needs
+  # `init -backend=false` (no credentials/state required for a validation).
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.11.3"
+      - name: terraform fmt
+        run: terraform fmt -recursive -check infra/terraform/
+      # Envs now split three tiers (PA-10): persistent (durable record), ui
+      # (ALB+api), eval (per-session fleet). scale/ is plan-only.
+      - name: terraform validate (persistent, ui, eval, scale)
+        run: |
+          for env in envs/dev/persistent envs/dev/ui envs/dev/eval envs/scale; do
+            ( cd infra/terraform/$env && terraform init -backend=false -input=false && terraform validate )
+          done
+
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2

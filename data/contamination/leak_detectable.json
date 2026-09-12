@@ -1,0 +1,1298 @@
+{
+  "astropy__astropy-12907": [],
+  "astropy__astropy-13033": [],
+  "astropy__astropy-13236": [
+    "astropy/table/tests/test_mixin.py::test_ndarray_mixin[False]",
+    "astropy/table/tests/test_table.py::test_structured_masked_column"
+  ],
+  "astropy__astropy-13398": [
+    "astropy/coordinates/tests/test_intermediate_transformations.py::test_cirs_itrs_topo",
+    "astropy/coordinates/tests/test_intermediate_transformations.py::test_itrs_straight_overhead",
+    "astropy/coordinates/tests/test_intermediate_transformations.py::test_itrs_topo_to_altaz_with_refraction",
+    "astropy/coordinates/tests/test_intermediate_transformations.py::test_itrs_topo_to_hadec_with_refraction"
+  ],
+  "astropy__astropy-13453": [
+    "astropy/io/ascii/tests/test_html.py::test_write_table_formatted_columns"
+  ],
+  "astropy__astropy-13579": [
+    "astropy/wcs/wcsapi/wrappers/tests/test_sliced_wcs.py::test_coupled_world_slicing"
+  ],
+  "astropy__astropy-13977": [
+    "astropy/units/tests/test_quantity_ufuncs.py::TestUfuncReturnsNotImplemented::TestBinaryUfuncs::test_full[None-duck_quantity0-quantity0-add]",
+    "astropy/units/tests/test_quantity_ufuncs.py::TestUfuncReturnsNotImplemented::TestBinaryUfuncs::test_full[None-duck_quantity0-quantity0-less]",
+    "astropy/units/tests/test_quantity_ufuncs.py::TestUfuncReturnsNotImplemented::TestBinaryUfuncs::test_full[None-duck_quantity0-quantity1-add]",
+    "astropy/units/tests/test_quantity_ufuncs.py::TestUfuncReturnsNotImplemented::TestBinaryUfuncs::test_full[None-duck_quantity0-quantity1-less]",
+    "astropy/units/tests/test_quantity_ufuncs.py::TestUfuncReturnsNotImplemented::TestBinaryUfuncs::test_full[None-duck_quantity1-quantity0-add]",
+    "astropy/units/tests/test_quantity_ufuncs.py::TestUfuncReturnsNotImplemented::TestBinaryUfuncs::test_full[None-duck_quantity1-quantity0-less]",
+    "astropy/units/tests/test_quantity_ufuncs.py::TestUfuncReturnsNotImplemented::TestBinaryUfuncs::test_full[None-duck_quantity1-quantity1-add]",
+    "astropy/units/tests/test_quantity_ufuncs.py::TestUfuncReturnsNotImplemented::TestBinaryUfuncs::test_full[None-duck_quantity1-quantity1-less]",
+    "astropy/units/tests/test_quantity_ufuncs.py::TestUfuncReturnsNotImplemented::TestBinaryUfuncs::test_full[empty-duck_quantity0-quantity0-add]",
+    "astropy/units/tests/test_quantity_ufuncs.py::TestUfuncReturnsNotImplemented::TestBinaryUfuncs::test_full[empty-duck_quantity0-quantity0-less]",
+    "astropy/units/tests/test_quantity_ufuncs.py::TestUfuncReturnsNotImplemented::TestBinaryUfuncs::test_full[empty-duck_quantity0-quantity0-multiply]",
+    "astropy/units/tests/test_quantity_ufuncs.py::TestUfuncReturnsNotImplemented::TestBinaryUfuncs::test_full[empty-duck_quantity0-quantity1-add]",
+    "astropy/units/tests/test_quantity_ufuncs.py::TestUfuncReturnsNotImplemented::TestBinaryUfuncs::test_full[empty-duck_quantity0-quantity1-less]",
+    "astropy/units/tests/test_quantity_ufuncs.py::TestUfuncReturnsNotImplemented::TestBinaryUfuncs::test_full[empty-duck_quantity0-quantity1-multiply]",
+    "astropy/units/tests/test_quantity_ufuncs.py::TestUfuncReturnsNotImplemented::TestBinaryUfuncs::test_full[empty-duck_quantity1-quantity0-add]",
+    "astropy/units/tests/test_quantity_ufuncs.py::TestUfuncReturnsNotImplemented::TestBinaryUfuncs::test_full[empty-duck_quantity1-quantity0-less]",
+    "astropy/units/tests/test_quantity_ufuncs.py::TestUfuncReturnsNotImplemented::TestBinaryUfuncs::test_full[empty-duck_quantity1-quantity0-multiply]",
+    "astropy/units/tests/test_quantity_ufuncs.py::TestUfuncReturnsNotImplemented::TestBinaryUfuncs::test_full[empty-duck_quantity1-quantity1-add]",
+    "astropy/units/tests/test_quantity_ufuncs.py::TestUfuncReturnsNotImplemented::TestBinaryUfuncs::test_full[empty-duck_quantity1-quantity1-less]",
+    "astropy/units/tests/test_quantity_ufuncs.py::TestUfuncReturnsNotImplemented::TestBinaryUfuncs::test_full[empty-duck_quantity1-quantity1-multiply]"
+  ],
+  "astropy__astropy-14096": [
+    "astropy/coordinates/tests/test_sky_coord.py::test_subclass_property_exception_error"
+  ],
+  "astropy__astropy-14182": [
+    "astropy/io/ascii/tests/test_rst.py::test_rst_with_header_rows"
+  ],
+  "astropy__astropy-14309": [
+    "astropy/io/fits/tests/test_connect.py::test_is_fits_gh_14305"
+  ],
+  "astropy__astropy-14365": [
+    "astropy/io/ascii/tests/test_qdp.py::test_roundtrip[True]"
+  ],
+  "astropy__astropy-14369": [],
+  "astropy__astropy-14508": [
+    "astropy/io/fits/tests/test_header.py::TestHeaderFunctions::test_floating_point_string_representation_card"
+  ],
+  "astropy__astropy-14539": [],
+  "astropy__astropy-14598": [
+    "astropy/io/fits/tests/test_header.py::TestHeaderFunctions::test_long_string_value_with_quotes"
+  ],
+  "astropy__astropy-14995": [
+    "astropy/nddata/mixins/tests/test_ndarithmetic.py::test_nddata_bitmask_arithmetic"
+  ],
+  "astropy__astropy-7166": [],
+  "astropy__astropy-7336": [
+    "astropy/units/tests/test_quantity_annotations.py::test_return_annotation_none"
+  ],
+  "astropy__astropy-7606": [],
+  "astropy__astropy-7671": [],
+  "astropy__astropy-8707": [
+    "astropy/io/fits/tests/test_header.py::TestHeaderFunctions::test_card_from_bytes"
+  ],
+  "astropy__astropy-8872": [],
+  "django__django-10097": [],
+  "django__django-10554": [
+    "test_union_with_values_list_and_order (queries.test_qs_combinators.QuerySetSetOperationTests)"
+  ],
+  "django__django-10880": [
+    "test_count_distinct_expression (aggregation.tests.AggregateTestCase)"
+  ],
+  "django__django-10914": [],
+  "django__django-10973": [],
+  "django__django-10999": [],
+  "django__django-11066": [
+    "test_existing_content_type_rename_other_database (contenttypes_tests.test_operations.ContentTypeOperationsTests)"
+  ],
+  "django__django-11087": [
+    "test_only_referenced_fields_selected (delete.tests.DeletionTests)"
+  ],
+  "django__django-11095": [
+    "test_get_inline_instances_override_get_inlines (generic_inline_admin.tests.GenericInlineModelAdminTest)"
+  ],
+  "django__django-11099": [],
+  "django__django-11119": [
+    "test_autoescape_off (template_tests.test_engine.RenderToStringTest)"
+  ],
+  "django__django-11133": [
+    "test_memoryview_content (httpwrappers.tests.HttpResponseTests)"
+  ],
+  "django__django-11138": [
+    "test_query_convert_timezones (timezones.tests.NewDatabaseTests)"
+  ],
+  "django__django-11149": [
+    "test_inline_add_m2m_view_only_perm (admin_inlines.tests.TestInlinePermissions)",
+    "test_inline_change_m2m_view_only_perm (admin_inlines.tests.TestInlinePermissions)"
+  ],
+  "django__django-11163": [],
+  "django__django-11179": [
+    "test_fast_delete_instance_set_pk_none (delete.tests.FastDeleteTests)"
+  ],
+  "django__django-11206": [],
+  "django__django-11211": [
+    "test_prefetch_GFK_uuid_pk (prefetch_related.tests.GenericRelationTests)"
+  ],
+  "django__django-11239": [
+    "test_ssl_certificate (dbshell.test_postgresql.PostgreSqlDbshellCommandTestCase)"
+  ],
+  "django__django-11265": [
+    "test_with_exclude (filtered_relation.tests.FilteredRelationTests)"
+  ],
+  "django__django-11276": [],
+  "django__django-11292": [
+    "test_skip_checks (user_commands.tests.CommandRunTests)"
+  ],
+  "django__django-11299": [
+    "test_simplecol_query (queries.test_query.TestQuery)"
+  ],
+  "django__django-11333": [
+    "test_resolver_cache_default__root_urlconf (urlpatterns.test_resolvers.ResolverCacheTests)"
+  ],
+  "django__django-11400": [
+    "test_get_choices_default_ordering (model_fields.tests.GetChoicesOrderingTests)",
+    "test_get_choices_reverse_related_field_default_ordering (model_fields.tests.GetChoicesOrderingTests)",
+    "test_relatedfieldlistfilter_reverse_relationships_default_ordering (admin_filters.tests.ListFiltersTests)"
+  ],
+  "django__django-11433": [
+    "test_default_not_populated_on_non_empty_value_in_cleaned_data (model_forms.tests.ModelFormBaseTest)"
+  ],
+  "django__django-11451": [
+    "test_authentication_without_credentials (auth_tests.test_auth_backends.CustomPermissionsUserModelBackendTest)",
+    "test_authentication_without_credentials (auth_tests.test_auth_backends.ExtensionUserModelBackendTest)",
+    "test_authentication_without_credentials (auth_tests.test_auth_backends.ModelBackendTest)"
+  ],
+  "django__django-11477": [
+    "test_re_path_with_optional_parameter (urlpatterns.tests.SimplifiedURLTests)"
+  ],
+  "django__django-11490": [],
+  "django__django-11532": [
+    "test_non_ascii_dns_non_unicode_email (mail.tests.MailTests)"
+  ],
+  "django__django-11551": [
+    "test_valid_field_accessible_via_instance (modeladmin.test_checks.ListDisplayTests)"
+  ],
+  "django__django-11555": [
+    "test_order_by_ptr_field_with_default_ordering_by_expression (ordering.tests.OrderingTests)"
+  ],
+  "django__django-11603": [
+    "test_distinct_on_aggregate (aggregation.tests.AggregateTestCase)"
+  ],
+  "django__django-11728": [],
+  "django__django-11734": [
+    "test_subquery_exclude_outerref (queries.tests.ExcludeTests)"
+  ],
+  "django__django-11740": [
+    "test_alter_field_to_fk_dependency_other_app (migrations.test_autodetector.AutodetectorTests)"
+  ],
+  "django__django-11749": [
+    "test_mutually_exclusive_group_required_options (user_commands.tests.CommandTests)"
+  ],
+  "django__django-11790": [],
+  "django__django-11815": [],
+  "django__django-11820": [
+    "test_ordering_pointing_multiple_times_to_model_fields (invalid_models_tests.test_models.OtherModelTests)",
+    "test_ordering_pointing_to_related_model_pk (invalid_models_tests.test_models.OtherModelTests)"
+  ],
+  "django__django-11848": [
+    "test_parsing_rfc850 (utils_tests.test_http.HttpDateProcessingTests)"
+  ],
+  "django__django-11880": [
+    "test_field_deep_copy_error_messages (forms_tests.tests.test_forms.FormsTestCase)"
+  ],
+  "django__django-11885": [
+    "test_fast_delete_combined_relationships (delete.tests.FastDeleteTests)"
+  ],
+  "django__django-11951": [
+    "test_explicit_batch_size_respects_max_batch_size (bulk_create.tests.BulkCreateTests)"
+  ],
+  "django__django-11964": [
+    "test_str (model_enums.tests.ChoicesTests)"
+  ],
+  "django__django-11999": [
+    "test_overriding_FIELD_display (model_fields.tests.GetFieldDisplayTests)"
+  ],
+  "django__django-12039": [
+    "test_descending_columns_list_sql (indexes.tests.SchemaIndexesTests)"
+  ],
+  "django__django-12050": [
+    "test_iterable_lookup_value (queries.test_query.TestQuery)"
+  ],
+  "django__django-12125": [
+    "test_serialize_nested_class (migrations.test_writer.WriterTests)"
+  ],
+  "django__django-12143": [
+    "test_get_list_editable_queryset_with_regex_chars_in_prefix (admin_changelist.tests.ChangeListTests)"
+  ],
+  "django__django-12155": [
+    "test_parse_rst_with_docstring_no_leading_line_feed (admin_docs.test_utils.TestUtils)"
+  ],
+  "django__django-12193": [
+    "test_get_context_does_not_mutate_attrs (forms_tests.widget_tests.test_checkboxinput.CheckboxInputTest)"
+  ],
+  "django__django-12209": [],
+  "django__django-12262": [],
+  "django__django-12273": [
+    "test_create_new_instance_with_pk_equals_none (model_inheritance_regress.tests.ModelInheritanceTest)",
+    "test_create_new_instance_with_pk_equals_none_multi_inheritance (model_inheritance_regress.tests.ModelInheritanceTest)"
+  ],
+  "django__django-12276": [
+    "test_filefield_with_fileinput_required (forms_tests.tests.test_forms.FormsTestCase)",
+    "test_use_required_attribute (forms_tests.widget_tests.test_fileinput.FileInputTest)"
+  ],
+  "django__django-12304": [
+    "test_templates (model_enums.tests.ChoicesTests)"
+  ],
+  "django__django-12308": [
+    "test_json_display_for_field (admin_utils.tests.UtilsTests)"
+  ],
+  "django__django-12325": [
+    "test_clash_parent_link (invalid_models_tests.test_relative_fields.ComplexClashTests)",
+    "test_onetoone_with_parent_model (invalid_models_tests.test_models.OtherModelTests)"
+  ],
+  "django__django-12406": [
+    "test_choices_radio_blank (model_forms.test_modelchoicefield.ModelChoiceFieldTests)",
+    "test_non_blank_foreign_key_with_radio (model_forms.tests.ModelFormBaseTest)"
+  ],
+  "django__django-12419": [],
+  "django__django-12663": [
+    "test_subquery_filter_by_lazy (expressions.tests.BasicExpressionsTests)"
+  ],
+  "django__django-12708": [
+    "test_alter_index_together_remove_with_unique_together (migrations.test_operations.OperationTests)"
+  ],
+  "django__django-12713": [
+    "test_formfield_overrides_m2m_filter_widget (admin_widgets.tests.AdminFormfieldForDBFieldTests)"
+  ],
+  "django__django-12741": [],
+  "django__django-12754": [
+    "test_add_model_with_field_removed_from_base_model (migrations.test_autodetector.AutodetectorTests)"
+  ],
+  "django__django-12774": [
+    "test_in_bulk_meta_constraint (lookup.tests.LookupTests)"
+  ],
+  "django__django-12858": [
+    "test_ordering_pointing_to_lookup_not_transform (invalid_models_tests.test_models.OtherModelTests)"
+  ],
+  "django__django-12965": [
+    "test_fast_delete_all (delete.tests.FastDeleteTests)"
+  ],
+  "django__django-13012": [
+    "test_empty_group_by (expressions.tests.ExpressionWrapperTests)",
+    "test_non_empty_group_by (expressions.tests.ExpressionWrapperTests)"
+  ],
+  "django__django-13023": [
+    "test_invalid_value (model_fields.test_decimalfield.DecimalFieldTests)"
+  ],
+  "django__django-13028": [
+    "test_field_with_filterable (queries.tests.Queries1Tests)"
+  ],
+  "django__django-13033": [
+    "test_order_by_self_referential_fk (ordering.tests.OrderingTests)"
+  ],
+  "django__django-13089": [
+    "test_cull_delete_when_store_empty (cache.tests.DBCacheTests)",
+    "test_cull_delete_when_store_empty (cache.tests.DBCacheWithTimeZoneTests)"
+  ],
+  "django__django-13109": [
+    "test_FK_validates_using_base_manager (validation.tests.BaseModelValidationTests)",
+    "test_validate_foreign_key_to_model_with_overridden_manager (model_forms.tests.ModelFormBasicTests)"
+  ],
+  "django__django-13112": [
+    "test_reference_mixed_case_app_label (migrations.test_state.StateTests)"
+  ],
+  "django__django-13121": [
+    "test_duration_expressions (expressions.tests.FTimeDeltaTests)"
+  ],
+  "django__django-13128": [],
+  "django__django-13158": [
+    "test_union_none (queries.test_qs_combinators.QuerySetSetOperationTests)"
+  ],
+  "django__django-13195": [
+    "test_delete_cookie_samesite (responses.test_cookie.DeleteCookieTests)",
+    "test_delete_cookie_secure_samesite_none (responses.test_cookie.DeleteCookieTests)"
+  ],
+  "django__django-13212": [
+    "test_value_placeholder_with_char_field (forms_tests.tests.test_validators.ValidatorCustomMessageTests)",
+    "test_value_placeholder_with_decimal_field (forms_tests.tests.test_validators.ValidatorCustomMessageTests)",
+    "test_value_placeholder_with_file_field (forms_tests.tests.test_validators.ValidatorCustomMessageTests)",
+    "test_value_placeholder_with_integer_field (forms_tests.tests.test_validators.ValidatorCustomMessageTests)",
+    "test_value_placeholder_with_null_character (forms_tests.tests.test_validators.ValidatorCustomMessageTests)"
+  ],
+  "django__django-13279": [
+    "test_default_hashing_algorith_legacy_decode (sessions_tests.tests.CacheDBSessionTests)",
+    "test_default_hashing_algorith_legacy_decode (sessions_tests.tests.CacheDBSessionWithTimeZoneTests)",
+    "test_default_hashing_algorith_legacy_decode (sessions_tests.tests.CacheSessionTests)",
+    "test_default_hashing_algorith_legacy_decode (sessions_tests.tests.CookieSessionTests)",
+    "test_default_hashing_algorith_legacy_decode (sessions_tests.tests.CustomDatabaseSessionTests)",
+    "test_default_hashing_algorith_legacy_decode (sessions_tests.tests.DatabaseSessionTests)",
+    "test_default_hashing_algorith_legacy_decode (sessions_tests.tests.DatabaseSessionWithTimeZoneTests)",
+    "test_default_hashing_algorith_legacy_decode (sessions_tests.tests.FileSessionPathLibTests)",
+    "test_default_hashing_algorith_legacy_decode (sessions_tests.tests.FileSessionTests)"
+  ],
+  "django__django-13297": [
+    "test_template_params_filtering (generic_views.test_base.DeprecationTests)"
+  ],
+  "django__django-13315": [
+    "test_limit_choices_to_no_duplicates (model_forms.tests.LimitChoicesToTests)"
+  ],
+  "django__django-13343": [
+    "test_deconstruction (file_storage.tests.FieldCallableFileStorageTests)"
+  ],
+  "django__django-13344": [
+    "test_coroutine (deprecation.test_middleware_mixin.MiddlewareMixinTests)"
+  ],
+  "django__django-13346": [
+    "test_key_in (model_fields.test_jsonfield.TestQuerying)"
+  ],
+  "django__django-13363": [],
+  "django__django-13406": [
+    "test_annotation_values (queryset_pickle.tests.PickleabilityTestCase)",
+    "test_annotation_values_list (queryset_pickle.tests.PickleabilityTestCase)"
+  ],
+  "django__django-13410": [
+    "test_exclusive_lock (files.tests.FileTests)",
+    "test_shared_lock (files.tests.FileTests)"
+  ],
+  "django__django-13417": [
+    "test_annotated_default_ordering (queries.tests.QuerysetOrderedTests)",
+    "test_annotated_values_default_ordering (queries.tests.QuerysetOrderedTests)"
+  ],
+  "django__django-13449": [
+    "test_lag_decimalfield (expressions_window.tests.WindowFunctionTests)"
+  ],
+  "django__django-13512": [],
+  "django__django-13513": [
+    "test_innermost_exception_without_traceback (view_tests.tests.test_debug.ExceptionReporterTests)"
+  ],
+  "django__django-13516": [
+    "test_outputwrapper_flush (user_commands.tests.CommandTests)"
+  ],
+  "django__django-13568": [
+    "test_username_unique_with_model_constraint (auth_tests.test_checks.UserModelChecksTests)"
+  ],
+  "django__django-13590": [
+    "test_range_lookup_namedtuple (expressions.tests.IterableLookupInnerExpressionsTests)"
+  ],
+  "django__django-13658": [
+    "test_program_name_from_argv (admin_scripts.tests.ExecuteFromCommandLine)"
+  ],
+  "django__django-13670": [
+    "test_year_before_1000 (utils_tests.test_dateformat.DateFormatTests)"
+  ],
+  "django__django-13741": [],
+  "django__django-13786": [
+    "test_create_model_and_remove_model_options (migrations.test_optimizer.OptimizerTests)"
+  ],
+  "django__django-13794": [
+    "test_add08 (template_tests.filter_tests.test_add.AddTests)",
+    "test_add09 (template_tests.filter_tests.test_add.AddTests)",
+    "test_lazy_add (utils_tests.test_functional.FunctionalTests)"
+  ],
+  "django__django-13807": [
+    "test_check_constraints_sql_keywords (backends.tests.FkConstraintsTests)"
+  ],
+  "django__django-13809": [
+    "test_skip_checks (admin_scripts.tests.ManageRunserver)"
+  ],
+  "django__django-13810": [
+    "test_async_and_sync_middleware_chain_async_call (middleware_exceptions.tests.MiddlewareNotUsedTests)"
+  ],
+  "django__django-13820": [
+    "test_loading_package_without__file__ (migrations.test_loader.LoaderTests)"
+  ],
+  "django__django-13821": [],
+  "django__django-13837": [
+    "test_run_as_non_django_module (utils_tests.test_autoreload.TestChildArguments)"
+  ],
+  "django__django-13925": [
+    "test_auto_created_inherited_pk (check_framework.test_model_checks.ModelDefaultAutoFieldTests)",
+    "test_explicit_inherited_pk (check_framework.test_model_checks.ModelDefaultAutoFieldTests)"
+  ],
+  "django__django-13933": [
+    "test_modelchoicefield_value_placeholder (forms_tests.tests.test_error_messages.ModelChoiceFieldErrorMessagesTestCase)"
+  ],
+  "django__django-13964": [
+    "test_save_fk_after_parent_with_non_numeric_pk_set_on_child (many_to_one.tests.ManyToOneTests)"
+  ],
+  "django__django-14007": [
+    "test_auto_field_subclass_create (custom_pk.tests.CustomPKTests)"
+  ],
+  "django__django-14017": [
+    "test_boolean_expression_combined_with_empty_Q (expressions.tests.BasicExpressionsTests)"
+  ],
+  "django__django-14034": [
+    "test_render_required_attributes (forms_tests.field_tests.test_multivaluefield.MultiValueFieldTest)"
+  ],
+  "django__django-14053": [],
+  "django__django-14089": [
+    "test_reversed (utils_tests.test_datastructures.OrderedSetTests)"
+  ],
+  "django__django-14122": [
+    "test_default_ordering_does_not_affect_group_by (ordering.tests.OrderingTests)"
+  ],
+  "django__django-14140": [
+    "test_deconstruct_boolean_expression (queries.test_q.QTests)"
+  ],
+  "django__django-14155": [
+    "test_repr_functools_partial (urlpatterns_reverse.tests.ResolverMatchTests)"
+  ],
+  "django__django-14170": [],
+  "django__django-14238": [
+    "test_default_auto_field_setting_bigautofield_subclass (model_options.test_default_pk.TestDefaultPK)"
+  ],
+  "django__django-14311": [
+    "test_run_as_non_django_module_non_package (utils_tests.test_autoreload.TestChildArguments)"
+  ],
+  "django__django-14315": [
+    "test_runshell_use_environ (backends.base.test_client.SimpleDatabaseClientTests)"
+  ],
+  "django__django-14349": [],
+  "django__django-14351": [
+    "test_having_subquery_select (aggregation_regress.tests.AggregationTests)"
+  ],
+  "django__django-14373": [
+    "test_Y_format_year_before_1000 (utils_tests.test_dateformat.DateFormatTests)"
+  ],
+  "django__django-14376": [
+    "test_options_non_deprecated_keys_preferred (dbshell.test_mysql.MySqlDbshellCommandTestCase)"
+  ],
+  "django__django-14404": [
+    "test_missing_slash_append_slash_true_force_script_name (admin_views.tests.AdminSiteFinalCatchAllPatternTests)",
+    "test_missing_slash_append_slash_true_script_name (admin_views.tests.AdminSiteFinalCatchAllPatternTests)"
+  ],
+  "django__django-14434": [
+    "test_unique_constraint (schema.tests.SchemaTests)"
+  ],
+  "django__django-14493": [
+    "test_collectstatistic_no_post_process_replaced_paths (staticfiles_tests.test_storage.TestCollectionNoPostProcessReplacedPaths)"
+  ],
+  "django__django-14500": [
+    "test_migrate_marks_replacement_unapplied (migrations.test_executor.ExecutorTests)"
+  ],
+  "django__django-14539": [],
+  "django__django-14559": [
+    "test_updated_rows_when_passing_duplicates (queries.test_bulk_update.BulkUpdateTests)"
+  ],
+  "django__django-14580": [
+    "test_serialize_type_model (migrations.test_writer.WriterTests)"
+  ],
+  "django__django-14608": [],
+  "django__django-14672": [
+    "test_field_name_clash_with_m2m_through (invalid_models_tests.test_models.ShadowingFieldsTests)",
+    "test_reverse_inherited_m2m_with_through_fields_list_hashable (m2m_through.tests.M2mThroughTests)"
+  ],
+  "django__django-14725": [
+    "test_edit_only (model_formsets.tests.ModelFormsetTest)",
+    "test_edit_only_inlineformset_factory (model_formsets.tests.ModelFormsetTest)",
+    "test_edit_only_object_outside_of_queryset (model_formsets.tests.ModelFormsetTest)"
+  ],
+  "django__django-14752": [
+    "test_serialize_result (admin_views.test_autocomplete_view.AutocompleteJsonViewTests)"
+  ],
+  "django__django-14765": [
+    "test_real_apps_non_set (migrations.test_state.StateTests)"
+  ],
+  "django__django-14771": [
+    "test_xoptions (utils_tests.test_autoreload.TestChildArguments)"
+  ],
+  "django__django-14855": [
+    "test_readonly_foreignkey_links_custom_admin_site (admin_views.tests.ReadonlyTest)"
+  ],
+  "django__django-14915": [
+    "test_choice_value_hash (model_forms.test_modelchoicefield.ModelChoiceFieldTests)"
+  ],
+  "django__django-14999": [
+    "test_rename_model_with_db_table_noop (migrations.test_operations.OperationTests)"
+  ],
+  "django__django-15022": [
+    "test_many_search_terms (admin_changelist.tests.ChangeListTests)"
+  ],
+  "django__django-15037": [
+    "test_foreign_key_to_field (inspectdb.tests.InspectDBTestCase)"
+  ],
+  "django__django-15098": [],
+  "django__django-15103": [
+    "test_json_script_without_id (utils_tests.test_html.TestUtilsHtml)",
+    "test_without_id (template_tests.filter_tests.test_json_script.JsonScriptTests)"
+  ],
+  "django__django-15104": [
+    "test_add_custom_fk_with_hardcoded_to (migrations.test_autodetector.AutodetectorTests)"
+  ],
+  "django__django-15127": [
+    "test_override_settings_level_tags (messages_tests.tests.TestLevelTags)"
+  ],
+  "django__django-15128": [
+    "test_conflicting_aliases_during_combine (queries.tests.QuerySetBitwiseOperationTests)"
+  ],
+  "django__django-15161": [
+    "test_serialize_complex_func_index (migrations.test_writer.WriterTests)"
+  ],
+  "django__django-15252": [
+    "test_migrate_test_setting_false_ensure_schema (backends.base.test_creation.TestDbCreationTests)"
+  ],
+  "django__django-15268": [],
+  "django__django-15278": [
+    "test_add_field_o2o_nullable (schema.tests.SchemaTests)"
+  ],
+  "django__django-15315": [
+    "test_hash_immutability (model_fields.tests.BasicFieldTests)"
+  ],
+  "django__django-15368": [
+    "test_f_expression (queries.test_bulk_update.BulkUpdateTests)"
+  ],
+  "django__django-15375": [
+    "test_aggregation_default_after_annotation (aggregation.tests.AggregateTestCase)"
+  ],
+  "django__django-15380": [
+    "test_rename_field_with_renamed_model (migrations.test_autodetector.AutodetectorTests)"
+  ],
+  "django__django-15382": [
+    "test_negated_empty_exists (expressions.tests.ExistsTests)"
+  ],
+  "django__django-15467": [
+    "test_radio_fields_foreignkey_formfield_overrides_empty_label (admin_widgets.tests.AdminFormfieldForDBFieldTests)"
+  ],
+  "django__django-15499": [
+    "test_create_alter_model_managers (migrations.test_optimizer.OptimizerTests)"
+  ],
+  "django__django-15503": [
+    "test_has_key_number (model_fields.test_jsonfield.TestQuerying)"
+  ],
+  "django__django-15554": [
+    "test_multiple (filtered_relation.tests.FilteredRelationTests)"
+  ],
+  "django__django-15561": [
+    "test_alter_field_choices_noop (schema.tests.SchemaTests)"
+  ],
+  "django__django-15563": [
+    "test_mti_update_grand_parent_through_child (model_inheritance_regress.tests.ModelInheritanceTest)",
+    "test_mti_update_parent_through_child (model_inheritance_regress.tests.ModelInheritanceTest)"
+  ],
+  "django__django-15569": [],
+  "django__django-15572": [
+    "test_template_dirs_ignore_empty_path (template_tests.test_autoreloader.TemplateReloadTests)"
+  ],
+  "django__django-15695": [],
+  "django__django-15731": [
+    "test_manager_method_signature (basic.tests.ManagerTest)"
+  ],
+  "django__django-15732": [
+    "test_remove_unique_together_on_unique_field (migrations.test_operations.OperationTests)"
+  ],
+  "django__django-15741": [
+    "test_date_lazy (template_tests.filter_tests.test_date.DateTests)",
+    "test_get_format_lazy_format (i18n.tests.FormattingTests)"
+  ],
+  "django__django-15814": [
+    "test_select_related_only (proxy_models.tests.ProxyModelTests)"
+  ],
+  "django__django-15851": [],
+  "django__django-15863": [],
+  "django__django-15916": [
+    "test_custom_callback_from_base_form_meta (model_forms.tests.FormFieldCallbackTests)",
+    "test_custom_callback_in_meta (model_forms.tests.FormFieldCallbackTests)"
+  ],
+  "django__django-15930": [
+    "test_annotate_with_full_when (expressions_case.tests.CaseExpressionTests)"
+  ],
+  "django__django-15957": [
+    "test_foreignkey_reverse (prefetch_related.tests.PrefetchLimitTests)",
+    "test_m2m_forward (prefetch_related.tests.PrefetchLimitTests)",
+    "test_m2m_reverse (prefetch_related.tests.PrefetchLimitTests)",
+    "test_reverse_ordering (prefetch_related.tests.PrefetchLimitTests)"
+  ],
+  "django__django-15973": [
+    "test_create_with_through_model_separate_apps (migrations.test_autodetector.AutodetectorTests)"
+  ],
+  "django__django-16032": [
+    "test_annotation_and_alias_filter_in_subquery (annotations.tests.NonAggregateAnnotationTestCase)",
+    "test_annotation_and_alias_filter_related_in_subquery (annotations.tests.NonAggregateAnnotationTestCase)"
+  ],
+  "django__django-16082": [],
+  "django__django-16100": [
+    "test_list_editable_atomicity (admin_changelist.tests.ChangeListTests)"
+  ],
+  "django__django-16116": [],
+  "django__django-16136": [
+    "test_http_method_not_allowed_responds_correctly (async.tests.ViewTests)"
+  ],
+  "django__django-16139": [
+    "test_link_to_password_reset_in_helptext_via_to_field (auth_tests.test_forms.UserChangeFormTest)"
+  ],
+  "django__django-16145": [
+    "test_zero_ip_addr (admin_scripts.tests.ManageRunserver)"
+  ],
+  "django__django-16255": [
+    "test_callable_sitemod_no_items (sitemaps_tests.test_http.HTTPSitemapTests)"
+  ],
+  "django__django-16256": [
+    "test_acreate (async.test_async_related_managers.AsyncRelatedManagersOperationTest)",
+    "test_acreate_reverse (async.test_async_related_managers.AsyncRelatedManagersOperationTest)",
+    "test_aget_or_create (async.test_async_related_managers.AsyncRelatedManagersOperationTest)",
+    "test_aget_or_create_reverse (async.test_async_related_managers.AsyncRelatedManagersOperationTest)",
+    "test_aupdate_or_create (async.test_async_related_managers.AsyncRelatedManagersOperationTest)",
+    "test_aupdate_or_create_reverse (async.test_async_related_managers.AsyncRelatedManagersOperationTest)",
+    "test_generic_async_acreate (generic_relations.tests.GenericRelationsTests)",
+    "test_generic_async_aget_or_create (generic_relations.tests.GenericRelationsTests)",
+    "test_generic_async_aupdate_or_create (generic_relations.tests.GenericRelationsTests)"
+  ],
+  "django__django-16263": [
+    "test_non_aggregate_annotation_pruned (aggregation.tests.AggregateAnnotationPruningTests)",
+    "test_unreferenced_aggregate_annotation_pruned (aggregation.tests.AggregateAnnotationPruningTests)",
+    "test_unused_aliased_aggregate_pruned (aggregation.tests.AggregateAnnotationPruningTests)"
+  ],
+  "django__django-16315": [
+    "test_update_conflicts_unique_fields_update_fields_db_column (bulk_create.tests.BulkCreateTests)"
+  ],
+  "django__django-16333": [
+    "test_custom_form_saves_many_to_many_field (auth_tests.test_forms.UserCreationFormTest)"
+  ],
+  "django__django-16429": [],
+  "django__django-16454": [
+    "test_subparser_error_formatting (user_commands.tests.CommandRunTests.test_subparser_error_formatting)"
+  ],
+  "django__django-16485": [],
+  "django__django-16502": [
+    "test_no_body_returned_for_head_requests (servers.test_basehttp.WSGIRequestHandlerTestCase.test_no_body_returned_for_head_requests)"
+  ],
+  "django__django-16527": [
+    "test_submit_row_save_as_new_add_permission_required (admin_views.test_templatetags.AdminTemplateTagsTest.test_submit_row_save_as_new_add_permission_required)"
+  ],
+  "django__django-16560": [
+    "test_custom_violation_code_message (constraints.tests.BaseConstraintTests.test_custom_violation_code_message)",
+    "test_repr_with_violation_error_code (constraints.tests.CheckConstraintTests.test_repr_with_violation_error_code)",
+    "test_repr_with_violation_error_code (constraints.tests.UniqueConstraintTests.test_repr_with_violation_error_code)",
+    "test_validate_conditon_custom_error (constraints.tests.UniqueConstraintTests.test_validate_conditon_custom_error)",
+    "test_validate_custom_error (constraints.tests.CheckConstraintTests.test_validate_custom_error)"
+  ],
+  "django__django-16569": [],
+  "django__django-16595": [
+    "test_alter_alter_field (migrations.test_optimizer.OptimizerTests.test_alter_alter_field)"
+  ],
+  "django__django-16612": [
+    "test_missing_slash_append_slash_true_query_string (admin_views.tests.AdminSiteFinalCatchAllPatternTests.test_missing_slash_append_slash_true_query_string)",
+    "test_missing_slash_append_slash_true_script_name_query_string (admin_views.tests.AdminSiteFinalCatchAllPatternTests.test_missing_slash_append_slash_true_script_name_query_string)"
+  ],
+  "django__django-16631": [
+    "test_get_user_fallback_secret (auth_tests.test_basic.TestGetUser.test_get_user_fallback_secret)"
+  ],
+  "django__django-16642": [],
+  "django__django-16661": [
+    "test_lookup_allowed_foreign_primary (modeladmin.tests.ModelAdminTests.test_lookup_allowed_foreign_primary)"
+  ],
+  "django__django-16662": [],
+  "django__django-16667": [],
+  "django__django-16801": [
+    "test_post_init_not_connected (model_fields.test_imagefield.ImageFieldNoDimensionsTests.test_post_init_not_connected)"
+  ],
+  "django__django-16819": [
+    "test_add_remove_index (migrations.test_optimizer.OptimizerTests.test_add_remove_index)"
+  ],
+  "django__django-16877": [
+    "test_autoescape_off (template_tests.filter_tests.test_escapeseq.EscapeseqTests.test_autoescape_off)",
+    "test_basic (template_tests.filter_tests.test_escapeseq.EscapeseqTests.test_basic)",
+    "test_chain_join (template_tests.filter_tests.test_escapeseq.EscapeseqTests.test_chain_join)",
+    "test_chain_join_autoescape_off (template_tests.filter_tests.test_escapeseq.EscapeseqTests.test_chain_join_autoescape_off)"
+  ],
+  "django__django-16899": [],
+  "django__django-16901": [
+    "test_filter_multiple (xor_lookups.tests.XorLookupsTests.test_filter_multiple)"
+  ],
+  "django__django-16938": [],
+  "django__django-17029": [
+    "test_clear_cache (apps.tests.AppsTests.test_clear_cache)"
+  ],
+  "django__django-17084": [
+    "test_referenced_window_requires_wrapping (aggregation.tests.AggregateAnnotationPruningTests.test_referenced_window_requires_wrapping)"
+  ],
+  "django__django-17087": [
+    "test_serialize_nested_class_method (migrations.test_writer.WriterTests.test_serialize_nested_class_method)"
+  ],
+  "django__django-7530": [],
+  "django__django-9296": [
+    "test_paginator_iteration (pagination.tests.PaginationTests)"
+  ],
+  "matplotlib__matplotlib-13989": [
+    "lib/matplotlib/tests/test_axes.py::test_hist_range_and_density"
+  ],
+  "matplotlib__matplotlib-14623": [],
+  "matplotlib__matplotlib-20488": [
+    "lib/matplotlib/tests/test_image.py::test_huge_range_log[png--1]"
+  ],
+  "matplotlib__matplotlib-20676": [
+    "lib/matplotlib/tests/test_widgets.py::test_span_selector_bound[horizontal]",
+    "lib/matplotlib/tests/test_widgets.py::test_span_selector_bound[vertical]"
+  ],
+  "matplotlib__matplotlib-20826": [
+    "lib/matplotlib/tests/test_axes.py::test_shared_axes_clear[png]"
+  ],
+  "matplotlib__matplotlib-20859": [
+    "lib/matplotlib/tests/test_legend.py::test_subfigure_legend"
+  ],
+  "matplotlib__matplotlib-21568": [],
+  "matplotlib__matplotlib-22719": [
+    "lib/matplotlib/tests/test_category.py::test_no_deprecation_on_empty_data"
+  ],
+  "matplotlib__matplotlib-22865": [
+    "lib/matplotlib/tests/test_colorbar.py::test_colorbar_extend_drawedges[both-1-res0]",
+    "lib/matplotlib/tests/test_colorbar.py::test_colorbar_extend_drawedges[max-0-res2]",
+    "lib/matplotlib/tests/test_colorbar.py::test_colorbar_extend_drawedges[min-0-res1]"
+  ],
+  "matplotlib__matplotlib-22871": [],
+  "matplotlib__matplotlib-23299": [
+    "lib/matplotlib/tests/test_rcparams.py::test_no_backend_reset_rccontext"
+  ],
+  "matplotlib__matplotlib-23314": [
+    "lib/mpl_toolkits/tests/test_mplot3d.py::test_invisible_axes[png]"
+  ],
+  "matplotlib__matplotlib-23412": [
+    "lib/matplotlib/tests/test_patches.py::test_dash_offset_patch_draw[png]"
+  ],
+  "matplotlib__matplotlib-23476": [
+    "lib/matplotlib/tests/test_figure.py::test_unpickle_with_device_pixel_ratio"
+  ],
+  "matplotlib__matplotlib-24026": [],
+  "matplotlib__matplotlib-24149": [
+    "lib/matplotlib/tests/test_axes.py::test_bar_all_nan[png]"
+  ],
+  "matplotlib__matplotlib-24177": [
+    "lib/matplotlib/tests/test_axes.py::test_small_autoscale"
+  ],
+  "matplotlib__matplotlib-24570": [
+    "lib/matplotlib/tests/test_offsetbox.py::test_packers[bottom]",
+    "lib/matplotlib/tests/test_offsetbox.py::test_packers[top]"
+  ],
+  "matplotlib__matplotlib-24627": [
+    "lib/matplotlib/tests/test_axes.py::test_cla_clears_children_axes_and_fig"
+  ],
+  "matplotlib__matplotlib-24637": [
+    "lib/matplotlib/tests/test_backend_svg.py::test_annotationbbox_gid"
+  ],
+  "matplotlib__matplotlib-24870": [
+    "lib/matplotlib/tests/test_contour.py::test_bool_autolevel"
+  ],
+  "matplotlib__matplotlib-24970": [
+    "lib/matplotlib/tests/test_colors.py::test_index_dtype[uint8]"
+  ],
+  "matplotlib__matplotlib-25122": [
+    "lib/matplotlib/tests/test_mlab.py::TestSpectral::test_psd_window_flattop[Fs4-default-complex]",
+    "lib/matplotlib/tests/test_mlab.py::TestSpectral::test_psd_window_flattop[Fs4-default-real]",
+    "lib/matplotlib/tests/test_mlab.py::TestSpectral::test_psd_window_flattop[Fs4-onesided-complex]",
+    "lib/matplotlib/tests/test_mlab.py::TestSpectral::test_psd_window_flattop[Fs4-onesided-real]",
+    "lib/matplotlib/tests/test_mlab.py::TestSpectral::test_psd_window_flattop[Fs4-twosided-complex]",
+    "lib/matplotlib/tests/test_mlab.py::TestSpectral::test_psd_window_flattop[Fs4-twosided-real]",
+    "lib/matplotlib/tests/test_mlab.py::TestSpectral::test_psd_window_flattop[FsAll-default-complex]",
+    "lib/matplotlib/tests/test_mlab.py::TestSpectral::test_psd_window_flattop[FsAll-default-real]",
+    "lib/matplotlib/tests/test_mlab.py::TestSpectral::test_psd_window_flattop[FsAll-onesided-complex]",
+    "lib/matplotlib/tests/test_mlab.py::TestSpectral::test_psd_window_flattop[FsAll-onesided-real]",
+    "lib/matplotlib/tests/test_mlab.py::TestSpectral::test_psd_window_flattop[FsAll-twosided-complex]",
+    "lib/matplotlib/tests/test_mlab.py::TestSpectral::test_psd_window_flattop[FsAll-twosided-real]"
+  ],
+  "matplotlib__matplotlib-25287": [
+    "lib/matplotlib/tests/test_axes.py::test_xaxis_offsetText_color",
+    "lib/matplotlib/tests/test_axes.py::test_yaxis_offsetText_color"
+  ],
+  "matplotlib__matplotlib-25311": [],
+  "matplotlib__matplotlib-25332": [],
+  "matplotlib__matplotlib-25479": [
+    "lib/matplotlib/tests/test_colors.py::test_set_cmap_mismatched_name"
+  ],
+  "matplotlib__matplotlib-25775": [
+    "lib/matplotlib/tests/test_text.py::test_annotation_antialiased",
+    "lib/matplotlib/tests/test_text.py::test_get_antialiased",
+    "lib/matplotlib/tests/test_text.py::test_set_antialiased",
+    "lib/matplotlib/tests/test_text.py::test_text_antialiased_off_default_vs_manual[pdf]",
+    "lib/matplotlib/tests/test_text.py::test_text_antialiased_off_default_vs_manual[png]",
+    "lib/matplotlib/tests/test_text.py::test_text_antialiased_on_default_vs_manual[pdf]",
+    "lib/matplotlib/tests/test_text.py::test_text_antialiased_on_default_vs_manual[png]"
+  ],
+  "matplotlib__matplotlib-25960": [
+    "lib/matplotlib/tests/test_figure.py::test_subfigures_wspace_hspace"
+  ],
+  "matplotlib__matplotlib-26113": [
+    "lib/matplotlib/tests/test_axes.py::test_hexbin_mincnt_behavior_upon_C_parameter[png]"
+  ],
+  "matplotlib__matplotlib-26208": [
+    "lib/matplotlib/tests/test_axes.py::test_twin_units[x]",
+    "lib/matplotlib/tests/test_axes.py::test_twin_units[y]"
+  ],
+  "matplotlib__matplotlib-26291": [
+    "lib/mpl_toolkits/axes_grid1/tests/test_axes_grid1.py::test_inset_axes_tight"
+  ],
+  "matplotlib__matplotlib-26342": [
+    "lib/matplotlib/tests/test_contour.py::test_contour_set_paths[png]"
+  ],
+  "matplotlib__matplotlib-26466": [
+    "lib/matplotlib/tests/test_text.py::test_annotate_and_offsetfrom_copy_input[png]"
+  ],
+  "mwaskom__seaborn-3069": [
+    "tests/_core/test_plot.py::TestScaling::test_nominal_x_axis_tweaks",
+    "tests/_core/test_plot.py::TestScaling::test_nominal_y_axis_tweaks"
+  ],
+  "mwaskom__seaborn-3187": [
+    "tests/_core/test_plot.py::TestLegend::test_legend_has_no_offset",
+    "tests/test_relational.py::TestRelationalPlotter::test_legend_has_no_offset"
+  ],
+  "pallets__flask-5014": [
+    "tests/test_blueprints.py::test_empty_name_not_allowed"
+  ],
+  "psf__requests-1142": [
+    "test_requests.py::RequestsTestCase::test_no_content_length"
+  ],
+  "psf__requests-1766": [
+    "test_requests.py::RequestsTestCase::test_DIGESTAUTH_QUOTES_QOP_VALUE"
+  ],
+  "psf__requests-1921": [
+    "test_requests.py::RequestsTestCase::test_headers_on_session_with_None_are_not_sent"
+  ],
+  "psf__requests-2317": [
+    "test_requests.py::TestTimeout::test_encoded_methods"
+  ],
+  "psf__requests-2931": [
+    "test_requests.py::TestRequests::test_binary_put"
+  ],
+  "psf__requests-5414": [],
+  "psf__requests-6028": [],
+  "pydata__xarray-2905": [],
+  "pydata__xarray-3095": [
+    "xarray/tests/test_variable.py::TestIndexVariable::test_copy[str-True]"
+  ],
+  "pydata__xarray-3151": [
+    "xarray/tests/test_combine.py::TestCombineAuto::test_combine_leaving_bystander_dimensions"
+  ],
+  "pydata__xarray-3305": [],
+  "pydata__xarray-3677": [
+    "xarray/tests/test_merge.py::TestMergeMethod::test_merge_dataarray"
+  ],
+  "pydata__xarray-3993": [],
+  "pydata__xarray-4075": [
+    "xarray/tests/test_weighted.py::test_weighted_mean_bool",
+    "xarray/tests/test_weighted.py::test_weighted_sum_of_weights_bool"
+  ],
+  "pydata__xarray-4094": [],
+  "pydata__xarray-4356": [
+    "xarray/tests/test_duck_array_ops.py::test_min_count_nd[prod-False-bool_]",
+    "xarray/tests/test_duck_array_ops.py::test_min_count_nd[prod-False-float32]",
+    "xarray/tests/test_duck_array_ops.py::test_min_count_nd[prod-False-float]",
+    "xarray/tests/test_duck_array_ops.py::test_min_count_nd[prod-False-int]",
+    "xarray/tests/test_duck_array_ops.py::test_min_count_nd[sum-False-bool_]",
+    "xarray/tests/test_duck_array_ops.py::test_min_count_nd[sum-False-float32]",
+    "xarray/tests/test_duck_array_ops.py::test_min_count_nd[sum-False-float]",
+    "xarray/tests/test_duck_array_ops.py::test_min_count_nd[sum-False-int]"
+  ],
+  "pydata__xarray-4629": [
+    "xarray/tests/test_merge.py::TestMergeFunction::test_merge_attrs_override_copy"
+  ],
+  "pydata__xarray-4687": [
+    "xarray/tests/test_computation.py::test_where_attrs"
+  ],
+  "pydata__xarray-4695": [
+    "xarray/tests/test_dataarray.py::TestDataArray::test_loc_dim_name_collision_with_sel_params"
+  ],
+  "pydata__xarray-4966": [
+    "xarray/tests/test_coding.py::test_decode_signed_from_unsigned[1]",
+    "xarray/tests/test_coding.py::test_decode_signed_from_unsigned[2]",
+    "xarray/tests/test_coding.py::test_decode_signed_from_unsigned[4]",
+    "xarray/tests/test_coding.py::test_decode_signed_from_unsigned[8]"
+  ],
+  "pydata__xarray-6461": [],
+  "pydata__xarray-6599": [],
+  "pydata__xarray-6721": [
+    "xarray/tests/test_dataset.py::TestDataset::test_chunks_does_not_load_data"
+  ],
+  "pydata__xarray-6744": [
+    "xarray/tests/test_rolling.py::TestDataArrayRolling::test_rolling_iter[numpy-3-True-1]",
+    "xarray/tests/test_rolling.py::TestDataArrayRolling::test_rolling_iter[numpy-3-True-2]",
+    "xarray/tests/test_rolling.py::TestDataArrayRolling::test_rolling_iter[numpy-7-True-1]"
+  ],
+  "pydata__xarray-6938": [
+    "xarray/tests/test_variable.py::TestIndexVariable::test_to_index_variable_copy"
+  ],
+  "pydata__xarray-6992": [
+    "xarray/tests/test_dataset.py::TestDataset::test_reset_index_drop_convert[arg4-False-dropped4-converted4-renamed4]",
+    "xarray/tests/test_dataset.py::TestDataset::test_reset_index_drop_convert[arg5-True-dropped5-converted5-renamed5]",
+    "xarray/tests/test_dataset.py::TestDataset::test_reset_index_drop_convert[arg6-False-dropped6-converted6-renamed6]",
+    "xarray/tests/test_dataset.py::TestDataset::test_reset_index_drop_convert[arg7-True-dropped7-converted7-renamed7]",
+    "xarray/tests/test_dataset.py::TestDataset::test_reset_index_drop_convert[foo-False-dropped0-converted0-renamed0]",
+    "xarray/tests/test_dataset.py::TestDataset::test_reset_index_drop_convert[foo-True-dropped1-converted1-renamed1]",
+    "xarray/tests/test_dataset.py::TestDataset::test_reset_index_drop_convert[x-False-dropped2-converted2-renamed2]",
+    "xarray/tests/test_dataset.py::TestDataset::test_reset_index_drop_convert[x-True-dropped3-converted3-renamed3]",
+    "xarray/tests/test_dataset.py::TestDataset::test_reset_index_drop_dims"
+  ],
+  "pydata__xarray-7229": [],
+  "pydata__xarray-7233": [
+    "xarray/tests/test_coarsen.py::TestCoarsenConstruct::test_coarsen_construct_keeps_all_coords"
+  ],
+  "pydata__xarray-7393": [
+    "xarray/tests/test_indexes.py::test_restore_dtype_on_multiindexes[float32]",
+    "xarray/tests/test_indexes.py::test_restore_dtype_on_multiindexes[int32]"
+  ],
+  "pylint-dev__pylint-4551": [
+    "tests/unittest_pyreverse_writer.py::test_get_annotation_annassign[a:",
+    "tests/unittest_pyreverse_writer.py::test_get_annotation_assignattr[def",
+    "tests/unittest_pyreverse_writer.py::test_infer_node_1",
+    "tests/unittest_pyreverse_writer.py::test_infer_node_2"
+  ],
+  "pylint-dev__pylint-4604": [
+    "tests/checkers/unittest_variables.py::TestVariablesChecker::test_attribute_in_type_comment"
+  ],
+  "pylint-dev__pylint-4661": [],
+  "pylint-dev__pylint-4970": [
+    "tests/checkers/unittest_similar.py::test_set_duplicate_lines_to_zero"
+  ],
+  "pylint-dev__pylint-6386": [
+    "tests/config/test_config.py::test_short_verbose"
+  ],
+  "pylint-dev__pylint-6528": [
+    "tests/lint/unittest_lint.py::test_recursive_ignore[--ignore-ignored_subdirectory]",
+    "tests/lint/unittest_lint.py::test_recursive_ignore[--ignore-patterns-ignored_*]",
+    "tests/test_self.py::TestRunTC::test_ignore_pattern_recursive",
+    "tests/test_self.py::TestRunTC::test_ignore_recursive"
+  ],
+  "pylint-dev__pylint-6903": [
+    "tests/test_pylint_runners.py::test_pylint_run_jobs_equal_zero_dont_crash_with_cpu_fraction"
+  ],
+  "pylint-dev__pylint-7080": [
+    "tests/test_self.py::TestRunTC::test_ignore_path_recursive_current_dir"
+  ],
+  "pylint-dev__pylint-7277": [],
+  "pytest-dev__pytest-10051": [
+    "testing/logging/test_fixture.py::test_clear_for_call_stage"
+  ],
+  "pytest-dev__pytest-10081": [
+    "testing/test_unittest.py::test_pdb_teardown_skipped_for_classes[@unittest.skip]"
+  ],
+  "pytest-dev__pytest-10356": [
+    "testing/test_mark.py::test_mark_mro"
+  ],
+  "pytest-dev__pytest-5262": [
+    "testing/test_capture.py::TestFDCapture::test_capfd_sys_stdout_mode"
+  ],
+  "pytest-dev__pytest-5631": [
+    "testing/python/integration.py::TestMockDecoration::test_mock_sentinel_check_against_numpy_like"
+  ],
+  "pytest-dev__pytest-5787": [
+    "testing/test_reports.py::TestReportSerialization::test_chained_exceptions[CollectReport]",
+    "testing/test_reports.py::TestReportSerialization::test_chained_exceptions[TestReport]"
+  ],
+  "pytest-dev__pytest-5809": [],
+  "pytest-dev__pytest-6197": [
+    "testing/test_collection.py::test_does_not_eagerly_collect_packages",
+    "testing/test_collection.py::test_does_not_put_src_on_path"
+  ],
+  "pytest-dev__pytest-6202": [],
+  "pytest-dev__pytest-7205": [
+    "testing/test_setuponly.py::test_show_fixture_action_with_bytes"
+  ],
+  "pytest-dev__pytest-7236": [
+    "testing/test_unittest.py::test_pdb_teardown_skipped[@unittest.skip]"
+  ],
+  "pytest-dev__pytest-7324": [],
+  "pytest-dev__pytest-7432": [
+    "testing/test_skipping.py::TestXFail::test_xfail_run_with_skip_mark[test_input1-expected1]"
+  ],
+  "pytest-dev__pytest-7490": [
+    "testing/test_skipping.py::TestXFail::test_dynamic_xfail_set_during_runtest_failed",
+    "testing/test_skipping.py::TestXFail::test_dynamic_xfail_set_during_runtest_passed_strict"
+  ],
+  "pytest-dev__pytest-7521": [
+    "testing/test_capture.py::TestCaptureFixture::test_cafd_preserves_newlines[\\r\\n]",
+    "testing/test_capture.py::TestCaptureFixture::test_cafd_preserves_newlines[\\r]"
+  ],
+  "pytest-dev__pytest-7571": [
+    "testing/logging/test_fixture.py::test_change_level_undos_handler_level"
+  ],
+  "pytest-dev__pytest-7982": [
+    "testing/test_collection.py::test_collect_symlink_dir"
+  ],
+  "pytest-dev__pytest-8399": [
+    "testing/test_unittest.py::test_fixtures_setup_setUpClass_issue8394"
+  ],
+  "scikit-learn__scikit-learn-10297": [
+    "sklearn/linear_model/tests/test_ridge.py::test_ridge_classifier_cv_store_cv_values"
+  ],
+  "scikit-learn__scikit-learn-10844": [
+    "sklearn/metrics/cluster/tests/test_supervised.py::test_int_overflow_mutual_info_fowlkes_mallows_score"
+  ],
+  "scikit-learn__scikit-learn-11310": [],
+  "scikit-learn__scikit-learn-11578": [
+    "sklearn/linear_model/tests/test_logistic.py::test_logistic_cv_multinomial_score[neg_log_loss-multiclass_agg_list3]"
+  ],
+  "scikit-learn__scikit-learn-12585": [
+    "sklearn/tests/test_base.py::test_clone_estimator_types"
+  ],
+  "scikit-learn__scikit-learn-12682": [
+    "sklearn/decomposition/tests/test_dict_learning.py::test_max_iter"
+  ],
+  "scikit-learn__scikit-learn-12973": [
+    "sklearn/linear_model/tests/test_least_angle.py::test_lasso_lars_fit_copyX_behaviour[False]"
+  ],
+  "scikit-learn__scikit-learn-13124": [],
+  "scikit-learn__scikit-learn-13135": [
+    "sklearn/preprocessing/tests/test_discretization.py::test_nonuniform_strategies[kmeans-expected_2bins1-expected_3bins1-expected_5bins1]"
+  ],
+  "scikit-learn__scikit-learn-13142": [
+    "sklearn/mixture/tests/test_bayesian_mixture.py::test_bayesian_mixture_fit_predict_n_init",
+    "sklearn/mixture/tests/test_gaussian_mixture.py::test_gaussian_mixture_fit_predict_n_init"
+  ],
+  "scikit-learn__scikit-learn-13328": [
+    "sklearn/linear_model/tests/test_huber.py::test_huber_bool"
+  ],
+  "scikit-learn__scikit-learn-13439": [],
+  "scikit-learn__scikit-learn-13496": [
+    "sklearn/ensemble/tests/test_iforest.py::test_iforest_warm_start"
+  ],
+  "scikit-learn__scikit-learn-13779": [
+    "sklearn/ensemble/tests/test_voting.py::test_none_estimator_with_weights[X0-y0-voter0]",
+    "sklearn/ensemble/tests/test_voting.py::test_none_estimator_with_weights[X1-y1-voter1]"
+  ],
+  "scikit-learn__scikit-learn-14053": [],
+  "scikit-learn__scikit-learn-14087": [
+    "sklearn/linear_model/tests/test_logistic.py::test_LogisticRegressionCV_no_refit[auto-l2]",
+    "sklearn/linear_model/tests/test_logistic.py::test_LogisticRegressionCV_no_refit[multinomial-l2]",
+    "sklearn/linear_model/tests/test_logistic.py::test_LogisticRegressionCV_no_refit[ovr-l2]"
+  ],
+  "scikit-learn__scikit-learn-14141": [],
+  "scikit-learn__scikit-learn-14496": [],
+  "scikit-learn__scikit-learn-14629": [
+    "sklearn/tests/test_multioutput.py::test_multi_output_classes_[estimator1]"
+  ],
+  "scikit-learn__scikit-learn-14710": [
+    "sklearn/ensemble/_hist_gradient_boosting/tests/test_gradient_boosting.py::test_string_target_early_stopping[None]"
+  ],
+  "scikit-learn__scikit-learn-14894": [
+    "sklearn/svm/tests/test_svm.py::test_sparse_fit_support_vectors_empty"
+  ],
+  "scikit-learn__scikit-learn-14983": [
+    "sklearn/model_selection/tests/test_split.py::test_repeated_cv_repr[RepeatedKFold]",
+    "sklearn/model_selection/tests/test_split.py::test_repeated_cv_repr[RepeatedStratifiedKFold]"
+  ],
+  "scikit-learn__scikit-learn-15100": [],
+  "scikit-learn__scikit-learn-25102": [
+    "sklearn/feature_selection/tests/test_base.py::test_output_dataframe",
+    "sklearn/feature_selection/tests/test_feature_select.py::test_dataframe_output_dtypes"
+  ],
+  "scikit-learn__scikit-learn-25232": [
+    "sklearn/impute/tests/test_impute.py::test_iterative_imputer_constant_fill_value"
+  ],
+  "scikit-learn__scikit-learn-25747": [
+    "sklearn/utils/tests/test_set_output.py::test_set_output_pandas_keep_index"
+  ],
+  "scikit-learn__scikit-learn-25931": [
+    "sklearn/ensemble/tests/test_iforest.py::test_iforest_preserve_feature_names"
+  ],
+  "scikit-learn__scikit-learn-25973": [
+    "sklearn/feature_selection/tests/test_sequential.py::test_cv_generator_support"
+  ],
+  "scikit-learn__scikit-learn-26194": [
+    "sklearn/metrics/tests/test_ranking.py::test_roc_curve_with_probablity_estimates[42]"
+  ],
+  "scikit-learn__scikit-learn-26323": [
+    "sklearn/compose/tests/test_column_transformer.py::test_remainder_set_output"
+  ],
+  "scikit-learn__scikit-learn-9288": [
+    "sklearn/cluster/tests/test_k_means.py::test_result_of_kmeans_equal_in_diff_n_jobs"
+  ],
+  "sphinx-doc__sphinx-10323": [
+    "tests/test_directive_code.py::test_LiteralIncludeReader_dedent_and_append_and_prepend"
+  ],
+  "sphinx-doc__sphinx-10435": [],
+  "sphinx-doc__sphinx-10449": [],
+  "sphinx-doc__sphinx-10466": [
+    "tests/test_build_gettext.py::test_Catalog_duplicated_message"
+  ],
+  "sphinx-doc__sphinx-10614": [
+    "tests/test_ext_inheritance_diagram.py::test_inheritance_diagram_svg_html"
+  ],
+  "sphinx-doc__sphinx-10673": [
+    "tests/test_environment_toctree.py::test_toctree_index"
+  ],
+  "sphinx-doc__sphinx-11445": [
+    "tests/test_util_rst.py::test_prepend_prolog_with_roles_in_sections_with_newline",
+    "tests/test_util_rst.py::test_prepend_prolog_with_roles_in_sections_without_newline"
+  ],
+  "sphinx-doc__sphinx-11510": [
+    "tests/test_directive_other.py::test_include_source_read_event",
+    "tests/test_directive_other.py::test_include_source_read_event_nested_includes"
+  ],
+  "sphinx-doc__sphinx-7440": [],
+  "sphinx-doc__sphinx-7454": [],
+  "sphinx-doc__sphinx-7462": [],
+  "sphinx-doc__sphinx-7590": [],
+  "sphinx-doc__sphinx-7748": [],
+  "sphinx-doc__sphinx-7757": [],
+  "sphinx-doc__sphinx-7889": [],
+  "sphinx-doc__sphinx-7910": [
+    "tests/test_ext_napoleon.py::SkipMemberTest::test_class_decorated_doc"
+  ],
+  "sphinx-doc__sphinx-7985": [],
+  "sphinx-doc__sphinx-8035": [
+    "tests/test_ext_autodoc_private_members.py::test_private_members"
+  ],
+  "sphinx-doc__sphinx-8056": [
+    "tests/test_ext_napoleon_docstring.py::NumpyDocstringTest::test_multiple_parameters"
+  ],
+  "sphinx-doc__sphinx-8120": [
+    "tests/test_intl.py::test_customize_system_message"
+  ],
+  "sphinx-doc__sphinx-8265": [],
+  "sphinx-doc__sphinx-8269": [
+    "tests/test_build_linkcheck.py::test_raises_for_invalid_status"
+  ],
+  "sphinx-doc__sphinx-8459": [
+    "tests/test_ext_autodoc_configs.py::test_autodoc_typehints_description_and_type_aliases"
+  ],
+  "sphinx-doc__sphinx-8475": [
+    "tests/test_build_linkcheck.py::test_TooManyRedirects_on_HEAD"
+  ],
+  "sphinx-doc__sphinx-8548": [
+    "tests/test_ext_autodoc_autoclass.py::test_inherited_instance_variable"
+  ],
+  "sphinx-doc__sphinx-8551": [
+    "tests/test_domain_py.py::test_info_field_list"
+  ],
+  "sphinx-doc__sphinx-8593": [],
+  "sphinx-doc__sphinx-8595": [
+    "tests/test_ext_autodoc_automodule.py::test_empty_all"
+  ],
+  "sphinx-doc__sphinx-8621": [],
+  "sphinx-doc__sphinx-8638": [
+    "tests/test_domain_py.py::test_info_field_list_var"
+  ],
+  "sphinx-doc__sphinx-8721": [
+    "tests/test_ext_viewcode.py::test_viewcode_epub_default"
+  ],
+  "sphinx-doc__sphinx-9229": [
+    "tests/test_ext_autodoc_autoclass.py::test_class_alias_having_doccomment"
+  ],
+  "sphinx-doc__sphinx-9230": [],
+  "sphinx-doc__sphinx-9258": [
+    "tests/test_domain_py.py::test_info_field_list_piped_type"
+  ],
+  "sphinx-doc__sphinx-9281": [
+    "tests/test_util_inspect.py::test_object_description_enum"
+  ],
+  "sphinx-doc__sphinx-9320": [
+    "tests/test_quickstart.py::test_exits_when_existing_confpy"
+  ],
+  "sphinx-doc__sphinx-9367": [],
+  "sphinx-doc__sphinx-9461": [
+    "tests/test_ext_autodoc_autoproperty.py::test_class_properties"
+  ],
+  "sphinx-doc__sphinx-9591": [],
+  "sphinx-doc__sphinx-9602": [
+    "tests/test_domain_py.py::test_parse_annotation_Literal"
+  ],
+  "sphinx-doc__sphinx-9658": [
+    "tests/test_util_typing.py::test_restify_mock"
+  ],
+  "sphinx-doc__sphinx-9673": [],
+  "sphinx-doc__sphinx-9698": [],
+  "sphinx-doc__sphinx-9711": [
+    "tests/test_extension.py::test_needs_extensions"
+  ],
+  "sympy__sympy-11618": [
+    "test_issue_11617"
+  ],
+  "sympy__sympy-12096": [
+    "test_issue_12092"
+  ],
+  "sympy__sympy-12419": [],
+  "sympy__sympy-12481": [],
+  "sympy__sympy-12489": [
+    "test_Permutation_subclassing"
+  ],
+  "sympy__sympy-13031": [],
+  "sympy__sympy-13091": [
+    "test_comparisons_with_unknown_type"
+  ],
+  "sympy__sympy-13372": [],
+  "sympy__sympy-13480": [],
+  "sympy__sympy-13551": [
+    "test_issue_13546"
+  ],
+  "sympy__sympy-13615": [],
+  "sympy__sympy-13647": [],
+  "sympy__sympy-13757": [
+    "test_issue_13079"
+  ],
+  "sympy__sympy-13798": [],
+  "sympy__sympy-13852": [
+    "test_polylog_values"
+  ],
+  "sympy__sympy-13877": [],
+  "sympy__sympy-13974": [],
+  "sympy__sympy-14248": [
+    "test_MatrixSymbol_printing"
+  ],
+  "sympy__sympy-14531": [],
+  "sympy__sympy-14711": [],
+  "sympy__sympy-15017": [],
+  "sympy__sympy-15345": [],
+  "sympy__sympy-15599": [],
+  "sympy__sympy-15809": [],
+  "sympy__sympy-15875": [],
+  "sympy__sympy-15976": [],
+  "sympy__sympy-16450": [],
+  "sympy__sympy-16597": [],
+  "sympy__sympy-16766": [],
+  "sympy__sympy-16792": [
+    "test_ccode_unused_array_arg"
+  ],
+  "sympy__sympy-16886": [],
+  "sympy__sympy-17139": [
+    "test_issue_17137"
+  ],
+  "sympy__sympy-17318": [
+    "test_issue_12420"
+  ],
+  "sympy__sympy-17630": [
+    "test_issue_17624",
+    "test_zero_matrix_add"
+  ],
+  "sympy__sympy-17655": [],
+  "sympy__sympy-18189": [],
+  "sympy__sympy-18199": [],
+  "sympy__sympy-18211": [
+    "test_issue_18188"
+  ],
+  "sympy__sympy-18763": [],
+  "sympy__sympy-19040": [],
+  "sympy__sympy-19346": [
+    "test_dict"
+  ],
+  "sympy__sympy-19495": [],
+  "sympy__sympy-19637": [],
+  "sympy__sympy-19783": [
+    "test_dagger_mul"
+  ],
+  "sympy__sympy-19954": [],
+  "sympy__sympy-20154": [],
+  "sympy__sympy-20428": [
+    "test_issue_20427"
+  ],
+  "sympy__sympy-20438": [
+    "test_issue_19378"
+  ],
+  "sympy__sympy-20590": [
+    "test_immutable"
+  ],
+  "sympy__sympy-20801": [
+    "test_zero_not_false"
+  ],
+  "sympy__sympy-20916": [],
+  "sympy__sympy-21379": [],
+  "sympy__sympy-21596": [],
+  "sympy__sympy-21612": [],
+  "sympy__sympy-21847": [],
+  "sympy__sympy-21930": [
+    "test_issue_19661"
+  ],
+  "sympy__sympy-22080": [
+    "test_empty_modules"
+  ],
+  "sympy__sympy-22456": [],
+  "sympy__sympy-22714": [
+    "test_issue_22684"
+  ],
+  "sympy__sympy-22914": [],
+  "sympy__sympy-23262": [],
+  "sympy__sympy-23534": [],
+  "sympy__sympy-23824": [],
+  "sympy__sympy-23950": [],
+  "sympy__sympy-24066": [
+    "test_issue_24062"
+  ],
+  "sympy__sympy-24213": [
+    "test_issue_24211"
+  ],
+  "sympy__sympy-24443": [],
+  "sympy__sympy-24539": [],
+  "sympy__sympy-24562": [
+    "test_issue_24543"
+  ],
+  "sympy__sympy-24661": [
+    "test_issue_24288"
+  ]
+}

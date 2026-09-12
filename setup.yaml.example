@@ -1,0 +1,25 @@
+# Copy to setup.yaml (gitignored) and fill in. `make bootstrap` reads it and writes
+# backend.hcl + terraform.tfvars for every Terraform root, creates the state bucket and
+# the two out-of-band secrets, and runs terraform init. Flat key: value lines only.
+
+# Deployment identity — the same three values Terraform's settings.tf and the containers use.
+region: us-west-2
+name_prefix: eval-dev            # lower-case letters, digits, dashes; prefixes every resource name
+aws_profile: eval-framework      # leave empty to use the ambient credential chain
+
+# Terraform state bucket (created if missing; versioned, AES256, public access blocked).
+tfstate_bucket: eval-framework-tfstate-<account-id>-<region>
+
+# persistent tier tfvars (SENSITIVE — this file is gitignored; state holds them in plaintext).
+master_database_password: CHANGE-ME-long-random-password
+litellm_master_key: sk-CHANGE-ME-litellm-master-key
+openrouter_api_key: sk-or-v1-CHANGE-ME          # the INFERENCE key the gateway uses
+notification_email: you@example.com            # budget / billing / nightly-guard SNS
+
+# Out-of-band secrets (created only if absent; leave empty to create them by hand later).
+openrouter_provisioning_key:                    # secret <prefix>-openrouter-management
+dockerhub_username:                             # secret ecr-pullthroughcache/<prefix>-dockerhub
+dockerhub_token:
+
+# Optional: an existing read-only reviewer role to pin to the SSM tunnel documents.
+reviewer_role_name:

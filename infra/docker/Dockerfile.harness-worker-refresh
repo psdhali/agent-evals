@@ -1,0 +1,83 @@
+# syntax=docker/dockerfile:1
+# Phase 0b PART2 §3 — refresh the framework into a pushed `-hw` image WITHOUT
+# rebuilding it.  The -hw's /app/.venv was built when uv.lock was current, so
+# only the framework source + editable install need updating — NOT the venv or
+# the six CLIs (1.10 GB of the 1.39 GB -hw is never stale).
+#
+# Why this exists (reviewer PART2 §3.1): the local -hw rebuild per instance
+# re-uploaded ~87% duplicate layers (the CLIs + venv) every build.  This
+# refresh is a pull + COPY + push — a framework-only patch never re-runs
+# install_repo_script and never needs egress once the -inst exists.
+#
+# Used TWICE in the build: (1) to fix the inherited -hw's broken editable
+# mapping when it becomes the env_image_key, and (2) as the LAST layer of the
+# -inst image so a framework-only patch only rebuilds this thin layer.
+ARG HW_IMAGE
+FROM ${HW_IMAGE}
+WORKDIR /app
+
+# Re-stamp FRAMEWORK_SHA at refresh time. Without this the image silently
+# inherits whatever value the BASE -hw had baked in (from Dockerfile.
+# harness-worker-env, via ENV FRAMEWORK_SHA) even though this layer copies in
+# genuinely fresh swebench_eval source below — so a correctly-rebuilt image
+# would self-report a stale commit. Content was never wrong, only the label;
+# found 2026-09-02, "fixed" 2026-09-03 (builder 5) — that fix was ITSELF
+# broken and shipped the exact same symptom. Root cause (found 2026-09-04,
+# isolated with a --no-cache build + a sentinel build-arg value that never
+# appeared in the result): FROM ${HW_IMAGE} already carries a baked
+# `ENV FRAMEWORK_SHA=<old value>` from a PRIOR refresh of this same -hw, and
+# Docker's ARG/ENV resolution, when an ARG shares a name with an ENV already
+# set in the build environment, resolves `$FRAMEWORK_SHA` to the EXISTING ENV
+# — never to the `--build-arg` value — no matter how the ARG is declared.
+# `--build-arg FRAMEWORK_SHA=X` was silently a no-op every single time this
+# ran on a previously-refreshed -hw (i.e. every time after the very first).
+# Fix: give the ARG a name that can't collide with an inherited ENV.
+ARG FRAMEWORK_SHA_BUILD_ARG=unknown
+ENV FRAMEWORK_SHA=$FRAMEWORK_SHA_BUILD_ARG
+
+# Guard: the inherited /app/.venv was built from the -hw's OWN uv.lock. If the
+# lockfile moved, this refresh would ship a venv that no longer matches the
+# project's dependencies. Fail loudly; rebuild the -hw instead.
+COPY uv.lock /tmp/uv.lock.new
+RUN cmp -s /app/uv.lock /tmp/uv.lock.new \
+ || { echo "FAIL: uv.lock changed since this -hw was built; rebuild the -hw"; exit 1; }
+RUN rm -f /tmp/uv.lock.new
+
+# ripgrep on PATH for opencode's grep/glob tools (run 6, 2026-09-08). opencode
+# resolves rg as `which rg` → `$XDG_DATA_HOME/opencode/bin/rg` → a GitHub
+# download (packages/core/src/ripgrep/binary.ts @ v1.18.18). The -hw never had
+# rg, the adapter's XDG_DATA_HOME is a fresh per-run temp dir, and the harness
+# task has no egress — so EVERY opencode grep/glob call in every run so far
+# failed ("ripgrep execution failed"; 1,575/1,575 in run 6) and each instance
+# stalled ~45 s at start on the download attempt. The model fell back to bash
+# grep, at a turn/token cost none of the other harnesses pay. A static musl
+# build on PATH satisfies the first lookup; pinned + checksummed (the build
+# tier has egress, the harness task does not). ARG names are prefixed like
+# FRAMEWORK_SHA_BUILD_ARG above so an inherited ENV can never shadow them.
+ARG RIPGREP_VERSION_BUILD_ARG=15.1.0
+ARG RIPGREP_SHA256_BUILD_ARG=1c9297be4a084eea7ecaedf93eb03d058d6faae29bbc57ecdaf5063921491599
+RUN set -eu; v="$RIPGREP_VERSION_BUILD_ARG"; \
+    f="ripgrep-${v}-x86_64-unknown-linux-musl.tar.gz"; \
+    curl -fsSL -o "/tmp/$f" "https://github.com/BurntSushi/ripgrep/releases/download/${v}/${f}"; \
+    echo "${RIPGREP_SHA256_BUILD_ARG}  /tmp/$f" | sha256sum -c -; \
+    tar -xzf "/tmp/$f" -C /usr/local/bin --strip-components=1 "ripgrep-${v}-x86_64-unknown-linux-musl/rg"; \
+    rm -f "/tmp/$f"; chmod 0755 /usr/local/bin/rg; \
+    command -v rg; rg --version | head -1
+
+COPY swebench_eval ./swebench_eval
+COPY infra/docker/entrypoint.sh /app/entrypoint.sh
+COPY scripts/verify_harness_isolation.py /app/verify_harness_isolation.py
+# Compaction build (Stage 2.2): mini's standalone context pruner — this is what
+# actually ships it this cycle (the refresh is the build that runs).  Must not
+# live inside swebench_eval/; see Dockerfile.harness-worker-env.
+COPY scripts/mini_pruning_agent.py /app/mini_pruning_agent.py
+RUN chmod +x /app/entrypoint.sh
+
+# MANDATORY — COPY alone does NOT make the framework importable.  The pushed
+# -hw carries an EMPTY editable MAPPING (uv sync ran before the source COPY, so
+# setuptools found zero packages).  It only ever imported by cwd=/app luck; the
+# -inst resets WORKDIR to /testbed, which exposed it.  Re-register the editable
+# install so the framework resolves from ANY cwd.  --no-deps: no index needed
+# (PIP_NO_INDEX=1 may already be set by the instance layer when this runs last).
+RUN uv pip install -e . --no-deps --python /app/.venv/bin/python
+RUN cd / && /app/.venv/bin/python -c "import importlib.util as u; assert u.find_spec('swebench_eval.workers.harness_worker'), 'framework not importable outside /app'; print('OK framework importable from cwd=/')"

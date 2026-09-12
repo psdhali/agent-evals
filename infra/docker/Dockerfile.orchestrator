@@ -1,0 +1,79 @@
+# syntax=docker/dockerfile:1
+# Orchestrator image — ONE image, two entrypoints (api + control-plane), A-5.
+# CMD default is the API; the control-plane task def overrides command.
+# Build for linux/amd64 (B-3/C-1 — the runtime is Fargate X86_64).
+# --- the operator UI, built once into the image (adoption Phase 2, option 2) -----------
+# Served by the API itself at /ui/ behind the private ALB + SSM tunnel: no Node on the
+# operator's laptop, one URL, nothing new exposed. The demo/Explorer build is a separate
+# static artefact (VITE_DATA_MODE=demo) and is not this.
+# node:24 = npm 11: ui/package-lock.json is written by npm 11 (lockfileVersion 3 with npm-11
+# optional-dependency resolution) and npm 10 (node:20) rejects it as out of sync (finding 16).
+FROM node:24-slim AS ui
+WORKDIR /ui
+COPY ui/package.json ui/package-lock.json ./
+RUN npm ci --no-audit --no-fund
+COPY ui/ ./
+ENV NODE_ENV=production
+RUN npm run build
+
+FROM python:3.12-slim
+
+# uv for locked dependency management (ADR-0017).
+COPY --from=ghcr.io/astral-sh/uv:0.5 /uv /uvx /bin/
+
+WORKDIR /app
+# K-2: do NOT put /app/.venv/bin on PATH. The framework's uv venv would shadow
+# system python/pip for every child process — INCLUDING the agent's `bash` tool —
+# so `python` resolves to the framework interpreter, `pip` to a pip that installs
+# where that interpreter never looks, and 5b's install_repo_script (conda activate
+# + pip install -e .) would build the right env and still hand the agent the wrong
+# python. entrypoint.sh invokes the venv binaries by absolute path instead, and
+# everything below the entrypoint sees a clean system PATH.
+ENV UV_COMPILE_BYTECODE=1 \
+    UV_LINK_MODE=copy \
+    PYTHONUNBUFFERED=1
+
+# PA-9 provenance: config_snapshot facts baked at build time (docker_build_push.sh
+# passes the real repo HEAD SHA + config hash). Inside the deployed container
+# there is no .git and no infra/docker/, so without these the snapshot's
+# framework_sha / gateway_config_hash would be None — and DoD 6 requires them
+# non-empty on a real run.
+ARG FRAMEWORK_SHA=unknown
+ARG GATEWAY_CONFIG_HASH=unknown
+ENV FRAMEWORK_SHA=$FRAMEWORK_SHA \
+    GATEWAY_CONFIG_HASH=$GATEWAY_CONFIG_HASH
+
+# Locked deps + project first (layer cache), then the entrypoint.
+COPY pyproject.toml uv.lock ./
+COPY swebench_eval ./swebench_eval
+COPY scripts/ ./scripts/
+# 5a-ii: run_migrations() resolves infra/docker/init.sql from the repo-relative
+# path; it is NOT shipped via the swebench_eval build context, so a deployed
+# control-plane would skip migrations silently. Bake it in at the path the app
+# already looks for.
+COPY infra/docker/init.sql /app/infra/docker/init.sql
+# 2026-09-09: our indexes on LiteLLM's spend-log table, applied by the API at startup
+# (llm_live.ensure_spend_log_indexes resolves it the same repo-relative way).
+COPY infra/docker/spend_db_indexes.sql /app/infra/docker/spend_db_indexes.sql
+# 2026-09-02: the dispatcher's config_snapshot + window resolution read the
+# baked gateway config from the same repo-relative path — without it every API
+# boot logs "could not read gateway config for config_snapshot" and the
+# snapshot's gateway provenance (and the baked-yaml window fallback) is empty.
+COPY infra/docker/litellm_config.yaml /app/infra/docker/litellm_config.yaml
+# 2026-09-02 (found live: the first real llm-judge launch crashed on this):
+# rubric.py's load_rubric() resolves config/judge_rubric.yaml relative to the
+# installed package the same way init.sql/litellm_config.yaml are resolved
+# above — it was never added here, so every deployed llm-judge task failed
+# before doing anything (RubricError: rubric file not found), even though
+# every test passed (they run against the checked-out repo, where config/
+# exists on disk regardless of what the image actually ships).
+COPY config/ /app/config/
+RUN uv sync --frozen --no-dev
+COPY --from=ui /ui/dist /app/ui_dist
+ENV UI_DIST_DIR=/app/ui_dist
+COPY infra/docker/entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
+EXPOSE 8000
+ENTRYPOINT ["/app/entrypoint.sh"]
+CMD ["orchestrator-api"]

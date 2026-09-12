@@ -1,0 +1,128 @@
+# Phase 3 — local gateway + Postgres + ElasticMQ + MinIO stack.
+#
+# Services:
+# 1. litellm      — LiteLLM Proxy (inference gateway, ADR-0002)
+# 2. postgres     — app control-plane database (runs, instance_results, etc.)
+# 3. litellm-db   — LiteLLM's own spend-log database (separate per architecture §6.5)
+# 4. elasticmq    — local SQS stand-in (harness-jobs, eval-jobs, results + DLQs)
+# 5. minio        — local S3 stand-in (artifact storage)
+#
+# Usage:
+#   docker compose -f infra/docker/docker-compose.yml up -d
+#   docker compose -f infra/docker/docker-compose.yml down
+
+name: swebench-eval
+
+services:
+  litellm:
+    # Pinned in lockstep with Dockerfile.gateway (see its FROM comment) — a
+    # floating main-stable broke the spend-row header tie-back on 2026-09-02.
+    image: ghcr.io/berriai/litellm:v1.99.1
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./litellm_config.yaml:/app/config.yaml:ro
+    # env_file paths resolve relative to THIS file, so the repo-root .env is found
+    # no matter what directory compose is invoked from. Without this, `docker compose
+    # -f infra/docker/docker-compose.yml up` (the command documented above) resolves
+    # .env relative to infra/docker/, finds nothing, and starts the gateway with an
+    # EMPTY OPENROUTER_API_KEY — which surfaces much later as an opaque OpenRouter
+    # 401 ("No user or org id found in auth cookie"), not as "missing key".
+    env_file:
+      - ../../.env
+    environment:
+      # NOTE: `environment` overrides `env_file`. Do not add OPENROUTER_API_KEY here —
+      # an unset shell variable would interpolate to "" and silently win over .env.
+      LITELLM_MASTER_KEY: ${LITELLM_MASTER_KEY:-sk-local}  # local dev only — must come from Secrets Manager in deployed config (Phase 5)
+      DATABASE_URL: postgresql://litellm:litellm@litellm-db:5432/litellm
+    command: ["--config", "/app/config.yaml"]
+    depends_on:
+      litellm-db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: eval
+      POSTGRES_PASSWORD: eval
+      POSTGRES_DB: eval_framework
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U eval -d eval_framework"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  litellm-db:
+    image: postgres:16-alpine
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: litellm
+      POSTGRES_PASSWORD: litellm
+      POSTGRES_DB: litellm
+    volumes:
+      - litellm_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U litellm -d litellm"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  elasticmq:
+    image: softwaremill/elasticmq-native:1.6.4
+    ports:
+      - "9324:9324"   # SQS-compatible endpoint
+      - "9325:9325"   # Web UI
+    volumes:
+      - ./elasticmq.conf:/opt/elasticmq.conf:ro
+    restart: unless-stopped
+
+  minio:
+    image: minio/minio:latest
+    ports:
+      - "9000:9000"   # S3-compatible API
+      - "9001:9001"   # Web console
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin  # local dev only — Phase 5 Secrets Manager
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+    restart: unless-stopped
+
+  # ── Redis — live in-flight progress (ADR-0018, local stand-in for ElastiCache) ──
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+  # ── MinIO bucket creation (one-shot) ─────────────────────────────
+  minio-init:
+    image: minio/mc:latest
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      until mc alias set local http://minio:9000 minioadmin minioadmin; do sleep 1; done;
+      mc mb --ignore-existing local/eval-artifacts;
+      mc mb --ignore-existing local/eval-dataset;
+      echo 'MinIO buckets ready';
+      exit 0;
+      "
+
+volumes:
+  pgdata:
+  litellm_pgdata:
+  minio_data:
+  redis_data:

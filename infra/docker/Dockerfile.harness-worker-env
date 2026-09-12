@@ -1,0 +1,181 @@
+# syntax=docker/dockerfile:1
+# The Phase 5b harness-worker image: the instance's environment image PLUS the
+# framework + the six agent CLIs in one extra layer.  Built per env by
+# scripts/warm_image_cache.py as `eval-dev-harness-worker:<ver>-<env-hash>-hw`.
+#
+# Why this shape: the agent runs INSIDE the prepared environment (image-env §8)
+# so a single task image carries both the env deps and the CLIs.  The framework's
+# venv stays OFF PATH (below) — but install_repo_script's `conda activate
+# testbed` runs in ITS OWN subshell and does not persist into the agent's `bash`
+# tool, so the agent resolves `python` against PATH. That is why the testbed env
+# is prepended to PATH explicitly (X2, found live on astropy-12907: 6/31 turns
+# lost finding the interpreter).
+#
+# ARG ENV_IMAGE is the pushed env tag, e.g.
+#   <account-id>.dkr.ecr.us-west-2.amazonaws.com/eval-dev-harness-worker:4.1.0-<hash>
+ARG ENV_IMAGE
+FROM ${ENV_IMAGE}
+
+# ── pip pin: SWE-bench 4.1.0 vs pip >= 25.3 ────────────────────────────────
+# SWE-bench's SPECS_SKLEARN install command (constants/python.py:23,:39) still
+# passes `--no-use-pep517`, which pip REMOVED in 25.3 (2025-10-24): "--use-pep517
+# is now always on, and --no-use-pep517 has been removed."  setup_env_script pins
+# python, numpy, scipy and conda but NOT pip, so every env image built after that
+# date resolves a pip that rejects the flag — 32 Verified instances (2 env images,
+# both scikit-learn) then die in install_repo_script with `no such option`.
+#
+# Why HERE and not in setup_env_script: the env image key is
+# sha256(env_script_list)[:22] (swebench test_spec.py:88-102).  Editing that
+# script changes ALL 40 env hashes, hence 40 env rebuilds, 40 new -hw tags, a
+# regenerated harness-task-families.auto.tfvars.json and another terraform apply.
+# install_repo_script runs at CONTAINER RUNTIME inside this image, so the pin
+# belongs in this layer: same fix, zero hash churn.
+#
+# Verified live in 4.1.0-3a59860bcd0dab8bbfb2ff-hw: testbed carried pip 26.0.1 and
+# `no such option: --no-use-pep517`; after this pin, pip 25.2 and the real command
+# exits 0.
+#
+# DO NOT remove this because "pip should be current" — 32 Verified instances fail
+# at repo prep without it.  It is dated: revisit only when SWE-bench's install
+# specs stop emitting --no-use-pep517.
+#
+# Image-parity (2026-09-05): this Dockerfile now also runs FROM SWE-bench's
+# PUBLISHED instance images (build_phase0_instances_v2.py --base official),
+# whose testbed pip is whatever the leaderboard graded with (django-10097's
+# py3.5 env carries pip 10.0.1).  The pin must only DOWNGRADE a pip that
+# rejects --no-use-pep517 (>= 25.3) — never upgrade an older one, which would
+# be exactly the environment drift the official base exists to remove.  On the
+# legacy env-image path pip is always current (>= 25.3), so nothing changes.
+RUN v="$(conda run -n testbed python -c 'import pip; print(pip.__version__)')" \
+    && case "$v" in \
+         25.[3-9]*|2[6-9].*|[3-9][0-9].*) \
+           echo "testbed pip $v >= 25.3 (drops --no-use-pep517); pinning below 25.3" \
+           && conda run -n testbed python -m pip install "pip<25.3" ;; \
+         *) echo "testbed pip $v predates 25.3; left exactly as the base image had it" ;; \
+       esac \
+    && conda run -n testbed python -m pip --version
+
+# Build-time reproducibility facts (PA-9) — baked by the warm job like the 5a
+# service images, so config_snapshot isn't None in the deployed container.
+#
+# FRAMEWORK_SHA's ARG is named FRAMEWORK_SHA_BUILD_ARG, not FRAMEWORK_SHA,
+# for consistency with Dockerfile.harness-worker-refresh's 2026-09-04 fix —
+# NOT because this specific bake is broken (FROM ${ENV_IMAGE} is always a
+# clean SWE-bench env image with no framework ENV of its own, so there's no
+# same-name collision here today), but an ARG/ENV name collision only bites
+# the moment something upstream changes; matching the safe pattern here too
+# means it can't silently break the same way later.
+ARG FRAMEWORK_SHA_BUILD_ARG=unknown
+ARG GATEWAY_CONFIG_HASH=unknown
+ENV FRAMEWORK_SHA=$FRAMEWORK_SHA_BUILD_ARG \
+    GATEWAY_CONFIG_HASH=$GATEWAY_CONFIG_HASH
+# Stage 3.3 (compaction build): GATEWAY_CONFIG_HASH is a sha256 of
+# litellm_config.yaml baked into all 40 images and read by nobody
+# (dispatcher.py:198 reads the DISPATCHER's env). Harmless today, guaranteed to
+# go stale. NEVER validate this against the deployed gateway — defer the ARG
+# removal to the next genuine env rebuild (do not spend 40 builds on it).
+
+# Stage 3.2 (compaction build): the BLAS thread limits were MOVED to the
+# INSTANCE layer (Dockerfile.instance-layer) — an env-layer ENV change forced a
+# full 40-image `-hw` rebuild instead of a refresh, and the instance layer is
+# the last layer of `-inst`, reaching both the harness container and the grading
+# container identically. Task-def env remains as belt-and-braces, no longer the
+# mechanism.
+
+# Toolchain: git (repo ops), curl/tar, and Node 20 for the npm CLIs. The env
+# image is Ubuntu-with-miniconda; its conda python is the AGENT's, and the
+# framework venv below is built with uv on an explicit 3.12.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        git ca-certificates curl xz-utils \
+    && rm -rf /var/lib/apt/lists/*
+
+# Node 20 LTS for the npm-based agent CLIs (claude, codex, opencode).
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y --no-install-recommends nodejs \
+    && rm -rf /var/lib/apt/lists/*
+
+# uv: framework deps AND the pip-distributed agent CLIs (aider, mini-swe-agent).
+COPY --from=ghcr.io/astral-sh/uv:0.5 /uv /uvx /bin/
+
+# The AGENT CLIs, installed off the framework venv. `uv tool` puts their
+# console scripts in ~/.local/bin; prepend that to PATH so the agent's bash
+# finds them (K-2 safe: this is the CLI layer, not the framework interpreter).
+#
+# Stage 3.1 (agreed-architecture-changes §3): every CLI is PINNED to an exact
+# version. Two builds of the same tag must be byte-identical; an unpinned
+# install silently changes what an "identical" tag contains, corrupting the
+# Phase 8 harness-vs-harness comparison. The resolved versions are then RECORDED
+# into /opt/harness-versions.json from the running binaries (see
+# write_harness_versions.sh) so a mid-experiment rebuild is never invisible.
+# G2 (HARNESS-ISOLATION-AUDIT-2026-09-05 §3): the agent runs as uid 1000
+# `agent`, not root, so /proc/1/environ (the worker's credentials) is
+# unreadable to it.  Everything the agent must EXECUTE therefore lives outside
+# /root (0700): uv-installed CLIs + their interpreter go to /opt, world-
+# readable.  The agent's own $HOME is /home/agent (routing.agent_environment
+# sets it); git must trust /testbed there (the worker chowns it to the agent
+# at job start, but the gitconfig makes a pre-chown read safe too).
+# The image's default user stays root: the worker and the eval container need it.
+ENV UV_TOOL_DIR=/opt/uv-tools \
+    UV_TOOL_BIN_DIR=/opt/uv-tools/bin \
+    UV_PYTHON_INSTALL_DIR=/opt/uv-python
+# No fixed uid/gid: SWE-bench's official images already carry gid 1000 (found
+# on the first G2 build, django-10097 v2: "GID '1000' already exists").  The
+# worker resolves the ids by NAME (routing.agent_user -> pwd), so whatever the
+# base hands out is fine.
+RUN (getent group agent >/dev/null || groupadd agent) \
+    && (id -u agent >/dev/null 2>&1 || useradd -m -g agent -s /bin/bash agent) \
+    && printf '[safe]\n\tdirectory = *\n[user]\n\tname = agent\n\temail = agent@harness.invalid\n' > /home/agent/.gitconfig \
+    && chown -R agent:agent /home/agent \
+    && mkdir -p /var/harness && chmod 1777 /var/harness
+ENV PATH="/opt/uv-tools/bin:${PATH}"
+# X2 (trajectory review §4): hand the agent the RIGHT interpreter up front.
+# The env image's base conda env has no repo deps, so `python` must resolve to
+# the `testbed` env install_repo_script populated. This line comes AFTER the
+# CLI prepend so the testbed interpreter is FIRST on PATH — anything earlier
+# (base miniconda) shadows it. /app/.venv stays absent from PATH (K-2), so the
+# framework is still invoked by absolute path only.
+ENV PATH="/opt/miniconda3/envs/testbed/bin:${PATH}"
+RUN uv python install 3.12 \
+    && uv tool install aider-chat==0.86.2 \
+    && uv tool install mini-swe-agent==2.4.6 \
+    && npm install -g @anthropic-ai/claude-code@2.1.234 \
+    && npm install -g @openai/codex@0.147.0 \
+    && npm install -g opencode-ai@1.18.18 \
+    && chmod -R a+rX /opt/uv-tools /opt/uv-python
+
+COPY infra/docker/write_harness_versions.sh /tmp/write_harness_versions.sh
+RUN chmod +x /tmp/write_harness_versions.sh && /tmp/write_harness_versions.sh
+
+WORKDIR /app
+
+# K-2: /app/.venv stays OFF PATH — entrypoint invokes it by absolute path.
+ENV UV_COMPILE_BYTECODE=1 \
+    UV_LINK_MODE=copy \
+    PYTHONUNBUFFERED=1
+
+# The editable install must resolve swebench_eval from ANY cwd. If `uv sync`
+# runs before the source exists, setuptools' packages.find sees zero packages
+# and writes an EMPTY editable MAPPING — the venv then imports only by luck of
+# cwd (the old WORKDIR /app crutch). Publisher root-cause (2026-08-23): this
+# file had the COPY AFTER the sync; every other Dockerfile has it before.
+# Swap so the source is present at install time, and assert it from cwd=/ so
+# the build IS the test (SWE-bench's instance layer resets WORKDIR to /testbed).
+COPY pyproject.toml uv.lock ./
+COPY swebench_eval ./swebench_eval
+RUN uv sync --frozen --no-dev --python 3.12
+RUN cd / && /app/.venv/bin/python -c "import importlib.util as u; assert u.find_spec('swebench_eval.workers.harness_worker'), 'framework not importable outside /app'; print('OK framework importable from cwd=/')"
+COPY infra/docker/entrypoint.sh /app/entrypoint.sh
+# B2 (stage-c-handover-round-2 §2): bake the updated A1/B1 isolation probe in so
+# the bring-up gate can run `verify_harness_isolation.py` from a harness task
+# (the A1-7/B1 assertions — credential fetch + gold-mirror GetObject must FAIL).
+COPY scripts/verify_harness_isolation.py /app/verify_harness_isolation.py
+# Compaction build (Stage 2.2): mini's context pruner.  Standalone ON PURPOSE —
+# it must NOT live inside swebench_eval/ (importing it from there drags the
+# package __init__ chain into mini's isolated uv-tool venv, which lacks our
+# deps).  It sits here, PYTHONPATH=/app at runtime, stdlib+minisweagent only.
+COPY scripts/mini_pruning_agent.py /app/mini_pruning_agent.py
+RUN chmod +x /app/entrypoint.sh
+
+ENTRYPOINT ["/app/entrypoint.sh"]
+CMD ["harness-worker"]

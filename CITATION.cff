@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use this framework or its published results, please cite it as below."
+title: "agent-evals: any coding-agent harness, any model, measured the same way on SWE-bench Verified"
+type: software
+version: "1.0"
+date-released: "2026-09-12"
+license: MIT
+repository-code: "https://github.com/psdhali/agent-evals"
+url: "https://evals.preetdhaliwal.dev"
+authors:
+  - family-names: Dhaliwal
+    given-names: Preetinder
+abstract: >-
+  An evaluation framework that runs any coding-agent harness with any model on SWE-bench
+  Verified at scale, enforces hard cost limits per problem from outside the agent, grades with
+  the official SWE-bench harness inside the official per-instance images, meters every inference
+  call, judges every trajectory with an evidence-required LLM judge, and publishes each result
+  with the provenance to reproduce it. Validated end to end from an empty AWS account using the
+  repository's setup guide alone.
+keywords:
+  - SWE-bench
+  - coding agents
+  - evaluation
+  - LLM judge
+  - reproducibility

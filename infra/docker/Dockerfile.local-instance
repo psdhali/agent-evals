@@ -1,0 +1,89 @@
+# syntax=docker/dockerfile:1
+# The LAPTOP per-instance image (adoption F3, 2026-09-11) — the no-AWS twin of the
+# ECR `-inst` image.  Built by scripts/local_instance_image.py FROM SWE-bench's
+# official per-instance image at the digest the committed snapshot pins, it adds
+# exactly what the harness needs to run the agent against the image's own
+# hardened /testbed:
+#
+#   1. the framework venv (uv, locked) — OFF PATH, invoked by absolute path (K-2);
+#   2. the unprivileged `agent` user the worker demotes the agent to (G2);
+#   3. the testbed-prepared sentinel binding the image to its instance (§2a.1), so
+#      the same repo_prep.verify_testbed_prebaked check the deployed worker runs
+#      passes here for the SAME reason.
+#
+# NOT in this image: the five CLI harnesses (Node, uv tools — the -hw layer),
+# the wheelhouse / PIP_NO_INDEX (grading runs in the official image itself,
+# pulled by digest, so Install B has the internet the official harness assumes)
+# and the ECR provenance.  It is a smoke-test image: one instance, one harness
+# (custom_minimal), cents of inference.
+#
+# ARG BASE_IMAGE = swebench/sweb.eval.x86_64.<owner>_1776_<repo>-<n>@sha256:<digest>
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+
+ARG INSTANCE_ID
+ARG BASE_COMMIT
+ARG BASE_IMAGE_REF
+ARG BASE_IMAGE_DIGEST
+ARG SWEBENCH_VERSION=5.0.2
+ARG FRAMEWORK_SHA_BUILD_ARG=unknown
+
+# git + certificates: the official image has git (the repo is a checkout) but a
+# few of the older Ubuntu bases lack ca-certificates for uv's downloads.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends git ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=ghcr.io/astral-sh/uv:0.5 /uv /uvx /bin/
+
+# G2 parity: the agent runs as `agent`, never root (routing.agent_user).  Some
+# official images already carry gid 1000; resolve by name, never by number.
+RUN (getent group agent >/dev/null || groupadd agent) \
+    && (id -u agent >/dev/null 2>&1 || useradd -m -g agent -s /bin/bash agent) \
+    && printf '[safe]\n\tdirectory = *\n[user]\n\tname = agent\n\temail = agent@harness.invalid\n' > /home/agent/.gitconfig \
+    && chown -R agent:agent /home/agent \
+    && mkdir -p /var/harness && chmod 1777 /var/harness
+
+# X2: the agent's `python` must be the testbed env's, first on PATH.
+ENV PATH="/opt/miniconda3/envs/testbed/bin:${PATH}"
+
+WORKDIR /app
+ENV UV_COMPILE_BYTECODE=1 \
+    UV_LINK_MODE=copy \
+    UV_PYTHON_INSTALL_DIR=/opt/uv-python \
+    PYTHONUNBUFFERED=1 \
+    FRAMEWORK_SHA=$FRAMEWORK_SHA_BUILD_ARG
+
+# Source BEFORE sync so the editable install maps a real package (the 2026-08-23
+# empty-mapping trap); asserted from cwd=/ because the agent's cwd is /testbed.
+COPY pyproject.toml uv.lock ./
+COPY swebench_eval ./swebench_eval
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv python install 3.12 && uv sync --frozen --no-dev --python 3.12
+RUN cd / && /app/.venv/bin/python -c "import importlib.util as u; assert u.find_spec('swebench_eval.workers.local_job'), 'framework not importable outside /app'; print('OK framework importable from cwd=/')"
+COPY infra/docker/entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
+# The sentinel — same shape the ECR instance layer writes (Dockerfile.instance-layer),
+# base_kind "official" because this image IS built from the digest-pinned official one.
+RUN printf '%s\n' \
+      '{' \
+      "  \"instance_id\": \"$INSTANCE_ID\"," \
+      "  \"base_commit\": \"$BASE_COMMIT\"," \
+      "  \"swebench_version\": \"$SWEBENCH_VERSION\"," \
+      "  \"framework_sha\": \"$FRAMEWORK_SHA_BUILD_ARG\"," \
+      "  \"base_kind\": \"official\"," \
+      "  \"base_image\": \"$BASE_IMAGE_REF\"," \
+      "  \"base_image_digest\": \"$BASE_IMAGE_DIGEST\"," \
+      "  \"local_smoke_image\": true," \
+      "  \"prepared_at\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"" \
+      '}' > /opt/testbed-prepared.json
+
+# 1-vCPU-shaped thread limits, as the instance layer sets them.
+ENV OMP_NUM_THREADS=1 \
+    OPENBLAS_NUM_THREADS=1 \
+    MKL_NUM_THREADS=1
+
+WORKDIR /testbed
+ENTRYPOINT ["/app/entrypoint.sh"]
+CMD ["local-job"]

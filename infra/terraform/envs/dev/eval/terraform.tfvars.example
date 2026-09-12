@@ -1,0 +1,10 @@
+# Copy to terraform.tfvars (gitignored) — or let `make bootstrap` write it.
+# Deployment identity (settings.tf); keep identical across every root.
+region         = "us-west-2"
+aws_profile    = "eval-framework" # "" = ambient credential chain
+name_prefix    = "eval-dev"
+tfstate_bucket = "<your-tfstate-bucket>"
+
+# The originating account attaches the tunnel policy to its existing reviewer role;
+# a fresh account leaves this empty.
+# reviewer_role_name = "eval-framework-scale-ro"

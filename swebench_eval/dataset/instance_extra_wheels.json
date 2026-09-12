@@ -1,0 +1,3 @@
+{
+  "pylint-dev__pylint-4661": ["appdirs>=1.4.0"]
+}

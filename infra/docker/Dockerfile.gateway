@@ -1,0 +1,31 @@
+# syntax=docker/dockerfile:1
+# Gateway image — LiteLLM proxy WITH our config baked in.
+#
+# The stock ghcr.io/berriai/litellm image has no /app/config.yaml (docker-compose
+# bind-mounts infra/docker/litellm_config.yaml; ECS has no bind mounts). Baking
+# it here keeps the SAME repo file as the single source and gives the deployed
+# task a config file without any ECS-side machinery. Build linux/amd64 (B-3/C-1
+# — Fargate X86_64), exactly like the four 5a-i service images.
+# PINNED (2026-09-02): main-stable floated 1.96.0 -> 1.99.1 under a routine
+# rebuild, and 1.99.1 stopped storing request headers in spend rows — which
+# silently broke the live view's per-instance tie-back mid-e2e.  Bump this pin
+# deliberately (with the spend-row shape re-verified), never via a rebuild.
+# Keep in lockstep with infra/docker/docker-compose.yml's litellm image.
+FROM ghcr.io/berriai/litellm:v1.99.1
+
+COPY infra/docker/litellm_config.yaml /app/config.yaml
+
+# PA-9 provenance parity: docker_build_push.sh passes --build-arg
+# FRAMEWORK_SHA/GATEWAY_CONFIG_HASH to every image; this Dockerfile must
+# declare them or they are silently discarded (the 5a-ii DoD-6 baking defect).
+# Nothing reads provenance from the gateway container today, but the ARG/ENV
+# makes the bake real so any future consumer sees the real SHA, not "unknown".
+ARG FRAMEWORK_SHA=unknown
+ARG GATEWAY_CONFIG_HASH=unknown
+ENV FRAMEWORK_SHA=$FRAMEWORK_SHA \
+    GATEWAY_CONFIG_HASH=$GATEWAY_CONFIG_HASH
+# The image entrypoint is `exec litellm "$@"` (docker/prod_entrypoint.sh); it
+# does NOT read LITELLM_CONFIG from env, and the default CMD is only `--port
+# 4000` — that starts LiteLLM with an EMPTY model list. Pass the config
+# explicitly, exactly as docker-compose does.
+CMD ["--config", "/app/config.yaml", "--port", "4000"]

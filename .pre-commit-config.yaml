@@ -1,0 +1,4 @@
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.21.2   # check https://github.com/gitleaks/gitleaks/releases for the current tag
+    hooks: [{id: gitleaks-system}]

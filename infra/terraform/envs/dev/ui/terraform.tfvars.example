@@ -1,0 +1,6 @@
+# Copy to terraform.tfvars (gitignored) — or let `make bootstrap` write it.
+# Deployment identity (settings.tf); keep identical across every root.
+region         = "us-west-2"
+aws_profile    = "eval-framework" # "" = ambient credential chain
+name_prefix    = "eval-dev"
+tfstate_bucket = "<your-tfstate-bucket>"

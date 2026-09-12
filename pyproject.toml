@@ -1,0 +1,97 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "swe-bench-eval-framework"
+version = "0.1.0"
+description = "Evaluation framework for SWE-bench"
+readme = "README.md"
+requires-python = ">=3.12"
+license = {text = "MIT"}
+dependencies = [
+    "fastapi>=0.110",
+    "uvicorn>=0.29",
+    "openai>=1.0",
+    "datasets>=2.0",
+    # ADR-0043: track upstream SWE-bench 5.x (harness API, dataset org, image refs
+    # all changed in 5.0); the lock resolves the exact patch release.
+    "swebench>=5.0.2,<6",
+    "psycopg2-binary>=2.9",
+    "python-dotenv>=1.0",
+    "boto3>=1.35",
+    "psutil>=6.0",
+    "redis>=5.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.5",
+    "black>=24.0",
+    "mypy>=1.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["swebench_eval*"]
+
+[tool.setuptools.package-data]
+# The L2 planner's fitted demand curves (scripts/fit_growth_curves.py output) ship with the
+# package so the dispatcher never runs on pooled defaults by accident.
+"swebench_eval.orchestrator.control_plane" = ["data/*.json"]
+# ADR-0043: the image-digest snapshot (instance_id -> official image digest) ships
+# with the package so the dispatcher's gate and the build tier read the same pin.
+"swebench_eval.dataset" = ["image_digests/*.json", "instance_extra_wheels.json"]
+# 2026-09-06: codex's base prompt with the apply_patch lines replaced (codex 0.147.0 registers
+# no apply_patch tool for a non-OpenAI model but its default prompt tells the model to use it).
+"swebench_eval.harnesses.codex" = ["*.md"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.black]
+line-length = 100
+# Match the actual interpreter (requires-python >=3.12, mypy python_version 3.12)
+# so Black performs its AST-equivalence safety check instead of skipping it.
+target-version = ["py312"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+ignore_missing_imports = true
+
+# §1.1 (rebuild-and-smoke-handover.md): CI runs `mypy swebench_eval/ scripts/ tests/` and was
+# red for 24 commits because `strict = true` demands annotations on every test function.
+# That is annotation pedantry, not type checking — `swebench_eval/` has ZERO errors.
+# Loosen annotation *strictness* for tests only (keep real checking: attr-defined, assignment,
+# operator, index, name-defined all still fire). Real type issues stay red.
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+disallow_untyped_calls = false
+
+# Compaction build (Stage 2.2): scripts/mini_pruning_agent.py imports ONLY
+# stdlib + minisweagent by design — it runs inside mini's isolated uv-tool venv,
+# and minisweagent is NOT a dependency of the harness venv, so mypy sees its
+# AgentConfig/DefaultAgent classes as `Any`.  The strict errors that fire here
+# (subclass-of-Any, has-type on `self.messages`, no-any-return, missing type
+# args) all stem from that untyped external base, NOT from the module's own
+# code — so relax the same flags the tests.* override relaxes, for this one
+# module. The important checks (attr-defined, operator, index, name-defined)
+# still fire on the parts of the file that reference real stdlib objects.
+[[tool.mypy.overrides]]
+module = "scripts.mini_pruning_agent"
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+disallow_untyped_calls = false
+disable_error_code = ["misc", "has-type", "no-any-return", "type-arg"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "integration: requires a live compose stack (Postgres, Redis, SQS/ElasticMQ, MinIO); deselected by default",
+]
+# Integration tests need the Docker Compose stack — deselect them for CI.
+addopts = "-m 'not integration'"

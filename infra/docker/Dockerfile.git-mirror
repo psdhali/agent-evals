@@ -1,0 +1,47 @@
+# syntax=docker/dockerfile:1
+# Stage 2.2 git mirror — served by `git daemon` (ADR-0029).
+#
+# Transport: `git://` over `git daemon` (port 9418), NOT nginx + fcgiwrap +
+# git-http-backend. The CGI transport produced five of the seven mirror bugs
+# (URL `.git` matching, missing git-http-backend, spawn-fcgi without a program,
+# empty GIT_HTTP_EXPORT_ALL dropped, nginx named-capture PATH_INFO) — all gone
+# with the daemon: `--export-all` is a CLI flag, there is no URL regex, no
+# PATH_INFO, no CGI user ownership. The git binary ships the whole server.
+#
+# The insteadOf redirect mechanism is unchanged (ADR-0029 §1): the harness and
+# the eval-side consumer layer rewrite `https://github.com/` ->
+# `git://git-mirror.eval.internal/`, so only the URL string changed.
+#
+# Content is BAKED at build time (seed_mirrors.sh clones all 12 repos). The
+# repos are read-only by the daemon's default: `receive-pack` is not enabled
+# unless --enable=receive-pack, so a push is impossible by default (M4).
+
+FROM ubuntu:22.04
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        git \
+        ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Provenance like every other service image (clean-pass finding 26): the build script
+# compares the baked sha with HEAD before it trusts a cached :latest for --push-only.
+ARG FRAMEWORK_SHA=unknown
+ENV FRAMEWORK_SHA=$FRAMEWORK_SHA \
+    GIT_MIRROR_HOST=git-mirror.eval.internal \
+    GIT_PROJECT_ROOT=/srv/git
+
+RUN mkdir -p /srv/git
+
+# Seed the mirrors (RUN, at BUILD time — the image is self-contained).
+COPY infra/docker/seed_mirrors.sh /usr/local/bin/seed_mirrors.sh
+RUN chmod +x /usr/local/bin/seed_mirrors.sh \
+    && /usr/local/bin/seed_mirrors.sh \
+    && rm -f /usr/local/bin/seed_mirrors.sh
+
+COPY infra/docker/run-mirror.sh /usr/local/bin/run-mirror.sh
+RUN chmod +x /usr/local/bin/run-mirror.sh
+
+EXPOSE 9418
+
+CMD ["/usr/local/bin/run-mirror.sh"]

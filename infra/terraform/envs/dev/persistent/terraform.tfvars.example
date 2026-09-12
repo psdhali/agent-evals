@@ -1,0 +1,18 @@
+# Copy to terraform.tfvars (gitignored) and fill in real values — or let
+# `make bootstrap` write it from setup.yaml.
+# Used by envs/dev/persistent/ — the durable backbone (Aurora + master secrets).
+#
+# These are SENSITIVE. The real terraform.tfvars is gitignored (see .gitignore
+# rule *.tfvars); never commit it. Terraform state will hold them in plaintext
+# regardless (prereq-setup Part B) — the state bucket is treated as sensitive.
+
+# Deployment identity (settings.tf; the same four values go in every root's tfvars).
+region         = "us-west-2"
+aws_profile    = "eval-framework" # "" = ambient credential chain
+name_prefix    = "eval-dev"
+tfstate_bucket = "<your-tfstate-bucket>"
+
+master_database_password = "CHANGE-ME-long-random-password"
+litellm_master_key        = "sk-CHANGE-ME-litellm-master-key"
+openrouter_api_key        = "sk-or-v1-CHANGE-ME"
+notification_email        = "you@example.com"

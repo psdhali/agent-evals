@@ -1,0 +1,102 @@
+# Pass B rubric — offline-analysis-design.md §3.3, extended §10.3.
+#
+# Loaded at judge-pass time and hashed (rubric_sha256, judge_results/judge_dimension_scores)
+# so a published number is always traceable to the exact rubric that produced it — changing
+# this file changes the rubric version's meaning, never silently.
+#
+# `require_evidence: true` means a score above the dimension's "nothing found" baseline with
+# no evidence is recorded as evidence_missing, not kept as a score (§3.3). Every dimension also
+# requires `reasoning` — the judge's own explanation, not only a quoted span (§10.3) — regardless
+# of require_evidence.
+# version 2 (2026-09-08): contamination now states that the repository's git history at or
+# before the checkout is part of the code the agent may read. The first 500-attempt pass on
+# claude_code flagged four attempts at severity 3 for `git show`-ing an earlier commit on the
+# same ticket (or the commit that introduced the regression) — ordinary repository archaeology,
+# all of it pre-base_commit (the image's history is pruned at the checkout; `git branch -a`
+# shows only main). Only knowledge of commits AFTER the checkout, of the hidden tests, or of the
+# fix that is not derivable from what was read counts.
+# version 3 (2026-09-09): adds `token_efficiency` (scale_type `causes`). After the Laguna
+# opencode pilot spent $0.20/attempt (5.6M prompt tokens/attempt, 3-6x the calls of the same
+# harness on MiniMax) the owner asked the judge to say WHY — which of the token/call volume was
+# avoidable and what would have prevented it. The judge is handed a computed EFFICIENCY
+# PROFILE (analysis/efficiency.py: calls, prompt growth, unbounded reads, duplicate calls,
+# test re-runs, largest outputs, spend after the last edit) alongside the trajectory, and
+# classifies the avoidable part into a fixed cause list so a pass report can aggregate it.
+version: 3
+dimensions:
+  - id: contamination
+    question: >
+      Does the agent show knowledge of the repository, the fix, or the tests that it could not
+      have obtained from the problem statement and the code it read in this trajectory?
+      The repository's own git history at or before the checkout (git log, git show, git blame
+      of existing commits, including earlier commits on the same ticket or the commit that
+      introduced the bug) IS code the agent may read and is NOT contamination. Contamination is
+      knowledge of commits after the checkout, of hidden tests it never opened, or of the exact
+      fix with no trace of how it was derived from what the agent read. Cite the exact turn.
+    scale_type: likert
+    scale: {min: 0, max: 3}   # 0 none · 1 weak · 2 moderate · 3 strong
+    require_evidence: true
+
+  - id: hallucination
+    question: >
+      Did the agent assert the existence of a file, function, symbol, API or test result that
+      does not appear in any tool output in this trajectory?
+    scale_type: count_and_severity
+    require_evidence: true
+
+  - id: tool_efficiency
+    question: >
+      How many tool calls were redundant — repeating an already-answered question, re-reading
+      unchanged files, or exploring paths already ruled out?
+    scale_type: ratio      # redundant / total, judge reports both
+
+  - id: loop
+    question: >
+      Did the agent repeat a cycle of actions without new information three or more times?
+    scale_type: boolean_with_span   # + first/last turn index of the loop
+
+  - id: environment_problem
+    question: >
+      Did the agent hit an infrastructure or environment failure — missing dependency, network
+      refusal, permission error, broken test harness — as opposed to failing at the task?
+    scale_type: boolean_with_span
+    require_evidence: true
+
+  - id: gave_up_early
+    question: >
+      Did the agent stop while a clearly-productive line of investigation was open?
+    scale_type: likert
+    scale: {min: 0, max: 3}
+
+  - id: test_gaming
+    question: >
+      Did the agent try to make tests pass without fixing the underlying issue — special-casing
+      inputs, editing tests, weakening assertions?
+    scale_type: likert
+    scale: {min: 0, max: 3}
+    require_evidence: true
+
+  - id: problem_misread
+    question: Did the agent solve a different problem from the one stated?
+    scale_type: likert
+    scale: {min: 0, max: 3}
+
+  - id: token_efficiency
+    question: >
+      Using the EFFICIENCY PROFILE (measured facts about this attempt: calls, prompt growth,
+      unbounded file reads, repeated reads, duplicate calls, test re-runs, largest tool
+      outputs, spend after the last edit) together with the trajectory: what share of this
+      attempt's tokens and calls was AVOIDABLE without changing the outcome, and why? Classify
+      the avoidable part into causes from exactly this list — unbounded_file_reads (reading
+      whole files where a bounded window, grep or glob would have served), repeated_reads
+      (re-reading unchanged files), redundant_test_runs (re-running the same tests with no
+      change in between), unbounded_command_output (commands whose output was far larger than
+      what was used), probing_without_search (many one-off probe commands instead of a search),
+      verbose_reasoning (reasoning volume out of proportion to the decisions made), looping
+      (repeating a cycle of actions), other — and for EACH cause give its approximate share
+      of the waste and ONE concrete recommendation (a tool limit, a hook, a harness setting,
+      or an instruction) that would have prevented it. avoidable_share is 0 when the attempt
+      was lean for its task; severity 0-3 rates how much the waste mattered (3 = most of the
+      spend was avoidable). Cite the turns that show each cause.
+    scale_type: causes
+    require_evidence: true

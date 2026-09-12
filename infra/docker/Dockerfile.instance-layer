@@ -1,0 +1,130 @@
+# syntax=docker/dockerfile:1
+# The per-instance image layer (builder1-per-instance-images-build-plan §2a.4).
+#
+# Phase 0a/0b: AFTER SWE-bench's `build_instance_image` produces
+# `sweb.eval.x86_64.<instance_id>:latest` (which ran install_repo_script WITH
+# internet and baked the prepared, hardened repo at /testbed), this layer adds:
+#
+#   1. the testbed-prepared SENTINEL — binds this image to its instance so the
+#      harness can fail closed against a wrong-family launch (§2a.1), and
+#   2. the WHEELHOUSE — the eval-time Install B (re-running `specs["install"]`
+#      at grade time, needed because the patch changes source and C-extension
+#      repos must recompile) does PEP 517, which creates a FRESH isolated build
+#      env and installs build-system.requires from an index.  The harness
+#      network has NO internet, so those wheels must live INSIDE the image
+#      (§2a.4).  Because PIP_NO_INDEX=1 is baked in last, the container cannot
+#      reach an index regardless of host network — the grade IS the test.
+#
+# ARG: SWE-bench's build images are referenced by `sweb.eval.x86_64.<id>` (no
+# :latest).  The build caller tags the produced `sweb.eval.<id>:latest` onto
+# THIS FROM.
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+
+# --- 1. the sentinel (written as a LAYER, baked at build time) -------------
+# Values come from the warm build (build args), NOT read at runtime — the
+# trusting path is a wrong family.  `prepared_at` stamps when.
+#
+# FRAMEWORK_SHA specifically is named FRAMEWORK_SHA_BUILD_ARG, not
+# FRAMEWORK_SHA — found 2026-09-04: ${BASE_IMAGE} (SWE-bench's own generated
+# image) inherits an ALREADY-BAKED `ENV FRAMEWORK_SHA=...` several layers back
+# (via env_name -> the pulled -hw -> SWE-bench's build_instance_image()), and
+# Docker resolves an ARG's `$NAME` reference to that pre-existing ENV instead
+# of the `--build-arg` value whenever the names collide — this sentinel's
+# "framework_sha" field was silently stuck at whatever -hw last baked, same
+# root cause as Dockerfile.harness-worker-refresh's identical bug. The other
+# three ARGs here (INSTANCE_ID/BASE_COMMIT/SWEBENCH_VERSION) have no same-name
+# ENV anywhere in this lineage, so they're not affected — left as-is.
+ARG INSTANCE_ID
+ARG BASE_COMMIT
+ARG SWEBENCH_VERSION
+ARG FRAMEWORK_SHA_BUILD_ARG
+# Image-parity (dev/IMAGE-PARITY-ROOT-CAUSE-AND-FIX-2026-09-05): WHAT the
+# prepared /testbed came from.  base_kind is "official" when the image was
+# built FROM SWE-bench's published `swebench/sweb.eval.x86_64.<id>` image
+# (digest-pinned, frozen deps — the environment the leaderboard graded in), or
+# "ecr-hw" for the legacy path that re-ran install_repo_script on our own env
+# image (an unpinned re-solve that drifted: pandas/numpy, django templates).
+# The gold-validation gate reads base_kind + base_image_digest to tell the two
+# apart in provenance; an empty digest means the legacy path.
+ARG BASE_KIND=ecr-hw
+ARG BASE_IMAGE_REF=
+ARG BASE_IMAGE_DIGEST=
+RUN printf '%s\n' \
+      '{' \
+      "  \"instance_id\": \"$INSTANCE_ID\"," \
+      "  \"base_commit\": \"$BASE_COMMIT\"," \
+      "  \"swebench_version\": \"$SWEBENCH_VERSION\"," \
+      "  \"framework_sha\": \"$FRAMEWORK_SHA_BUILD_ARG\"," \
+      "  \"base_kind\": \"$BASE_KIND\"," \
+      "  \"base_image\": \"$BASE_IMAGE_REF\"," \
+      "  \"base_image_digest\": \"$BASE_IMAGE_DIGEST\"," \
+      "  \"prepared_at\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"" \
+      '}' > /opt/testbed-prepared.json
+
+# --- 2. capture the wheelhouse from the PREPARED tree -----------------------
+# pre_install has already run, so /testbed/pyproject.toml holds the FINAL,
+# sed-rewritten build requirements.  Read them (with the FRAMEWORK python 3.12,
+# which has tomllib — never the testbed python, whose ABI belongs to the
+# wheels, not the parse), then download wheels for the build-system + a couple
+# of always-needed build tools.  `--only-binary=:all:` fails LOUDLY when an
+# sdist (no wheel) is needed instead of recursively needing ITS build deps at
+# runtime (§2a.4.5).  The capture script is COPY'd in by the build caller
+# (build_phase0_instances.py), so no shell quoting reaches python.
+COPY capture_build_reqs.py /opt/capture_build_reqs.py
+# Per-instance EXTRA wheels (2026-09-06): one requirement per line, written by
+# the build caller from swebench_eval/dataset/instance_extra_wheels.json —
+# empty for every instance but the ones whose gold patch ADDS a runtime
+# dependency (pylint-dev__pylint-4661: `appdirs>=1.4.0`; the eval script's
+# `pip install -e .` re-runs after the patch and step 3 below forbids the
+# index, so the wheel must already be in /opt/wheels).  Downloaded, never
+# installed: the testbed env stays the frozen one the leaderboard graded in.
+COPY extra-wheels.txt /opt/extra-wheels.txt
+RUN /app/.venv/bin/python /opt/capture_build_reqs.py \
+ && echo "build-system.requires from /testbed/pyproject.toml:" \
+ && cat /opt/build-reqs.txt
+
+# `setuptools` + `wheel` are the two build tools every PEP 517 install needs;
+# Cython/numpy/C the chain resolves from the requirements list.  Combine them.
+# Use -r (a requirements FILE), NOT $(cat ...) as CLI args: scikit's
+# build-system.requires carry `;`-separated ENVIRONMENT MARKERS
+# (`oldest-supported-numpy; python_version!='3.10' or ...`), and pip rejects a
+# bare `;` in a CLI argument (`Expected end or semicolon`).  In a -r file the
+# markers are valid and evaluated against the running interpreter.
+RUN conda run -n testbed python -m pip download --only-binary=:all: \
+        --dest /opt/wheels setuptools wheel -r /opt/build-reqs.txt \
+ && ls -la /opt/wheels > /opt/wheelhouse-manifest.txt
+
+# --- 3. LAST — break the index so Install B cannot phone PyPI --------------
+ENV PIP_FIND_LINKS=/opt/wheels \
+    PIP_NO_INDEX=1
+
+# --- 4. RUNTIME thread/job limits — the instance layer is the LAST layer of
+# `-inst`, and this image is what BOTH the harness container AND the eval
+# (grading) container actually run (ensure_instance_image retags it to
+# `sweb.eval.x86_64.<id>:latest`).  Both limits are sized for a machine the 1-vCPU
+# task does not have (SWE-bench tasks are cpu=1024, 2 GB), so they must be image
+# ENV here — a task-def level value never reaches the grading process (the eval
+# worker builds the test container with NO environment=).
+
+# Stage 3.1 (F1): build_phase0_instances.py:280 bakes `-j8` from the BUILD
+# HOST's core count into /testbed (MAKEFLAGS/SKLEARN_BUILD_PARALLEL/
+# NPY_NUM_BUILD_JOBS).  The container still *sees* 8 cores (cgroup cpu.max =
+# 100000 100000) although it has 1 vCPU, so at grade time SWE-bench re-runs
+# specs["install"] and C-extensions recompile with -j8 on one vCPU — a memory
+# risk, not speed.  Build keeps -j8; runtime gets -j1.
+ENV MAKEFLAGS=-j1 \
+    SKLEARN_BUILD_PARALLEL=1 \
+    NPY_NUM_BUILD_JOBS=1
+
+# Stage 3.2 (M5 moved here): OMP/OPENBLAS/MKL thread limits.  Originally put in
+# the env layer (harness-worker-env) — correct intent, wrong layer: an env-layer
+# ENV change forces a full 40-image `-hw` rebuild instead of a refresh.  Here it
+# still reaches BOTH tiers (this instance layer is applied after SWE-bench's
+# compile and is the last layer of -inst), and it makes the two thread/job fixes
+# live together.  Pins OpenBLAS to 1 thread so the LAPACK workspace query is
+# stable on a 1-vCPU task (dsyevr liwork=1).  Task-def copies stay as
+# belt-and-braces, no longer the mechanism.
+ENV OMP_NUM_THREADS=1 \
+    OPENBLAS_NUM_THREADS=1 \
+    MKL_NUM_THREADS=1
