@@ -270,8 +270,12 @@ export class DemoStore {
   }
 
   /** make `runId` the replayed run; resumes its saved position (or t = 0,
-   * playing) — the run's simulated state is kept until "restart replay" */
-  switchRun(runId: string, opts: { reset?: boolean } = {}): void {
+   * playing) — the run's simulated state is kept until "restart replay".
+   * `atEnd`: a run opened for the first time through a deep link to one of its
+   * instances starts at the end of the window, so the attempt's panels are
+   * complete instead of PENDING until the clock reaches it (the bundle must be
+   * loaded, else the window length is unknown and t = 0 applies). */
+  switchRun(runId: string, opts: { reset?: boolean; atEnd?: boolean } = {}): void {
     if (this.runId === runId && !opts.reset) return;
     if (this.runId) {
       this.positions.set(this.runId, { t: this.now(), playing: this.playing });
@@ -279,7 +283,7 @@ export class DemoStore {
     this.runId = runId;
     const saved = opts.reset ? undefined : this.positions.get(runId);
     if (opts.reset) this.sims.delete(runId);
-    this.baseT = saved?.t ?? 0;
+    this.baseT = saved?.t ?? (opts.atEnd ? (this.endOf(runId) ?? 0) : 0);
     this.baseWall = wall();
     this.playing = saved?.playing ?? true;
     this.notify(true);

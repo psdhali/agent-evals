@@ -11,13 +11,23 @@ import { DemoContext } from './demoContext';
 // discontinuity (scrub, jump, restart, switch) or a simulated action, so the
 // panels re-answer immediately instead of at their next poll.
 
-function runIdFromHash(): string | null {
-  const parts = window.location.hash
+function hashParts(): string[] {
+  return window.location.hash
     .replace(/^#\/?/, '')
     .split('/')
     .filter(Boolean)
     .map((p) => decodeURIComponent(p));
+}
+
+function runIdFromHash(): string | null {
+  const parts = hashParts();
   return parts[0] === 'runs' && parts[1] ? parts[1] : null;
+}
+
+/** `#/runs/<run>/instances/<instance>/<attempt>` — a link straight to one attempt */
+function isInstanceHash(): boolean {
+  const parts = hashParts();
+  return parts[0] === 'runs' && parts[2] === 'instances' && Boolean(parts[3]);
 }
 
 export function DemoProvider({ children }: { children: ReactNode }) {
@@ -49,7 +59,9 @@ export function DemoProvider({ children }: { children: ReactNode }) {
       if (!target && !demoStore.runId) target = await defaultRunId();
       if (!target || target === demoStore.runId || cancelled) return;
       await loadBundle(target); // the clock needs the window length first
-      if (!cancelled) demoStore.switchRun(target);
+      // a deep link to an attempt opens the run at the end of its window, so the
+      // attempt is complete on arrival; a run link still replays from t = 0
+      if (!cancelled) demoStore.switchRun(target, { atEnd: isInstanceHash() });
     };
     void sync();
     const onHash = () => void sync();

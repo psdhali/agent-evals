@@ -984,8 +984,13 @@ function parseTrajectory(raw: string): TrajTurn[] {
 }
 
 /** the conversation prefix that the k-th model call (1-based) saw + produced:
- * consecutive assistant turns are one call (reasoning + text + tool calls) */
-function messagesForCall(
+ * consecutive assistant turns are one call (reasoning + text + tool calls).
+ * Two harness conventions are folded in: a turn whose only text is `reasoning`
+ * (mini-swe-agent's THOUGHT, OpenCode's thinking before a tool call) shows that
+ * text as the message rather than an empty body; and a `result` turn that
+ * carries only usage (OpenCode writes one per model step) is a call boundary,
+ * not a tool message, so it is not rendered. */
+export function messagesForCall(
   turns: TrajTurn[],
   k: number,
 ): Record<string, unknown>[] {
@@ -1000,11 +1005,12 @@ function messagesForCall(
         if (calls > k) break;
       }
       prevAssistant = true;
+      const text = t.content ?? '';
       const msg: Record<string, unknown> = {
         role: 'assistant',
-        content: t.content ?? '',
+        content: text || (t.reasoning ?? ''),
       };
-      if (t.reasoning) msg.reasoning_content = t.reasoning;
+      if (t.reasoning && text) msg.reasoning_content = t.reasoning;
       if (t.tool_calls?.length) {
         msg.tool_calls = t.tool_calls.map((tc) => ({
           id: tc.id,
@@ -1026,6 +1032,7 @@ function messagesForCall(
     if (role === 'tool' || role === 'result') {
       const cmd = t.normalized?.command;
       const body = t.output ?? t.stdout ?? t.content ?? '';
+      if (role === 'result' && !body && !cmd) continue; // usage marker only
       msgs.push({
         role: 'tool',
         content: `${t.name ? `[${t.name}]` : ''}${cmd ? ` ${cmd}` : ''}\n${body}`,
@@ -2199,7 +2206,7 @@ export const demoApi: ApiShape = {
       if (e instanceof ApiError && e.status === 404) {
         throw new ApiError(
           404,
-          'artifact not published in this snapshot (artifacts are included for three of the runs)',
+          'artifact not published in this snapshot',
         );
       }
       throw e;
