@@ -62,3 +62,7 @@ jobs:
         with:
           fetch-depth: 0
       - uses: gitleaks/gitleaks-action@v2
+        env:
+          # required on pull_request events (the action reads the PR's commits);
+          # the automatic token, read-only, is enough
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
